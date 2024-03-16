@@ -31,12 +31,6 @@ const presetDef: Presets = {
   }
 };
 
-export const logester = (
-  logger: typeof Logestic.defaultLogger = Logestic.defaultLogger
-): Elysia => {
-  return new Logestic(logger).instance;
-};
-
 export class Logestic {
   private requestedAttrs: {
     [key in keyof Attribute]: boolean;

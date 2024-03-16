@@ -1,18 +1,9 @@
 {
   "name": "logestic",
   "version": "0.0.4",
+  "license": "MIT",
+  "author": "Nishant Aanjaney Jalan <cybercoder.nishant@gmail.com>",
   "description": "An advanced and customisable logging library for ElysiaJS",
-  "main": "dist/index.js",
-  "types": "dist/index.d.ts",
-  "files": [
-    "/dist"
-  ],
-  "exports": {
-    "require": "./dist/index.js",
-    "import": "./dist/index.js",
-    "node": "./dist/index.js",
-    "default": "./dist/index.js"
-  },
   "keywords": [
     "logging",
     "logger",
@@ -20,29 +11,30 @@
     "elysiajs",
     "middleware"
   ],
+  "homepage": "https://github.com/cybercoder-naj/logestic.git",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/cybercoder-naj/logestic.git"
   },
-  "author": "Nishant Aanjaney Jalan <cybercoder.nishant@gmail.com>",
-  "license": "MIT",
+  "bugs": "https://github.com/cybercoder-naj/logestic/issues",
+  "exports": {
+    ".": "./src/index.ts"
+  },
   "module": "src/index.ts",
   "type": "module",
-  "devDependencies": {
-    "@elysiajs/eden": "0.8.1",
-    "typescript": "^5.0.0",
-    "bun-types": "latest"
+  "scripts": {
+    "build": "rm -rf dist && bun build src/index.ts --outdir ./dist --target bun --minify --external elysia && tsc",
+    "test": "bun test"
   },
   "peerDependencies": {
     "typescript": "^5.0.0",
     "elysia": "0.8.17"
   },
-  "scripts": {
-    "build": "rm -rf dist && bun build src/index.ts --outdir ./dist --target bun --minify --external elysia && tsc",
-    "test": "bun test"
+  "devDependencies": {
+    "@elysiajs/eden": "0.8.1",
+    "typescript": "^5.0.0",
+    "bun-types": "latest"
   },
-  "homepage": "https://github.com/cybercoder-naj/logestic.git",
-  "bugs": "https://github.com/cybercoder-naj/logestic/issues",
   "publishConfig": {
     "access": "public"
   }
