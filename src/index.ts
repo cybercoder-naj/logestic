@@ -31,7 +31,7 @@ const presetDef: Presets = {
   }
 };
 
-export class Logos {
+export class Logestic {
   private requestedAttrs: {
     [key in keyof Attribute]: boolean;
   };
@@ -41,14 +41,14 @@ export class Logos {
     console.log(msg);
   };
 
-  constructor(logger: typeof Logos.defaultLogger = Logos.defaultLogger) {
+  constructor(logger: typeof Logestic.defaultLogger = Logestic.defaultLogger) {
     this.requestedAttrs = {};
     this.logger = logger;
   }
 
-  use(attr: keyof Attribute): Logos;
-  use(attrs: (keyof Attribute)[]): Logos;
-  use(attrs: keyof Attribute | (keyof Attribute)[]): Logos {
+  use(attr: keyof Attribute): Logestic;
+  use(attrs: (keyof Attribute)[]): Logestic;
+  use(attrs: keyof Attribute | (keyof Attribute)[]): Logestic {
     if (attrs instanceof Array) {
       for (const attr of attrs) {
         this.requestedAttrs[attr] = true;
@@ -63,10 +63,10 @@ export class Logos {
 
   static preset(
     name: keyof Presets,
-    logger: typeof Logos.defaultLogger = Logos.defaultLogger
+    logger: typeof Logestic.defaultLogger = Logestic.defaultLogger
   ): Elysia {
     const { uses, format } = presetDef[name];
-    return new Logos(logger).use(uses).custom(format);
+    return new Logestic(logger).use(uses).custom(format);
   }
 
   custom(format: (attr: Attribute) => string): Elysia {

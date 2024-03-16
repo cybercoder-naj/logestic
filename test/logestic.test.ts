@@ -1,21 +1,21 @@
 import { describe, it, expect, beforeAll, beforeEach } from 'bun:test';
 import { Elysia, t } from 'elysia';
-import { Logos } from '../src';
+import { Logestic } from '../src';
 import { edenTreaty } from '@elysiajs/eden';
 
-describe('Logos', () => {
+describe('Logestic', () => {
   describe('Custom formatting', () => {
     let app: Elysia;
     let client: any;
     let logs: string[] = [];
 
     beforeAll(() => {
-      const logos = new Logos(msg => logs.push(msg))
+      const logestic = new Logestic(msg => logs.push(msg))
         .use('method')
         .use('path')
         .use('contentLength');
 
-      const logger = logos.custom(({ method, path, contentLength }) => {
+      const logger = logestic.custom(({ method, path, contentLength }) => {
         return `${method} ${path} ${contentLength}`;
       });
 
@@ -43,7 +43,7 @@ describe('Logos', () => {
     let logs: string[] = [];
 
     beforeAll(() => {
-      const logger = Logos.preset('common', msg => logs.push(msg));
+      const logger = Logestic.preset('common', msg => logs.push(msg));
 
       app = new Elysia()
         .use(logger)

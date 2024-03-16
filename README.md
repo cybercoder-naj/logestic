@@ -1,4 +1,4 @@
-# logos
+# Logestic
 
 To install dependencies:
 
