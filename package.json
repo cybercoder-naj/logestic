@@ -1,6 +1,30 @@
 {
   "name": "logos",
+  "version": "0.0.1",
+  "description": "An advanced and customisable logging library for ElysiaJS",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "files": [
+    "/dist"
+  ],
+  "keywords": [
+    "logging",
+    "logger",
+    "elysia",
+    "elysiajs",
+    "middleware"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/cybercoder-naj/logos.git"
+  },
+  "author": "Nishant Aanjaney Jalan <cybercoder.nishant@gmail.com>",
+  "license": "MIT",
   "module": "src/index.ts",
+  "type": "module",
+  "dependencies": {
+    "elysia": "0.8.17"
+  },
   "devDependencies": {
     "@elysiajs/eden": "0.8.1",
     "@types/bun": "latest"
@@ -8,8 +32,13 @@
   "peerDependencies": {
     "typescript": "^5.0.0"
   },
-  "type": "module",
-  "dependencies": {
-    "elysia": "0.8.17"
+  "scripts": {
+    "build": "rm -rf dist && bun build src/index.ts --outdir ./dist --target bun --minify --external elysia && tsc",
+    "test": "bun test"
+  },
+  "homepage": "https://github.com/cybercoder-naj/logos.git",
+  "bugs": "https://github.com/cybercoder-naj/logos/issues",
+  "publishConfig": {
+    "access": "public"
   }
 }

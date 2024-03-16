@@ -37,7 +37,11 @@ export class Logos {
   };
   private logger: (msg: string) => void;
 
-  constructor(logger: (msg: string) => void = console.log) {
+  private static defaultLogger = (msg: string): void => {
+    console.log(msg);
+  };
+
+  constructor(logger: typeof Logos.defaultLogger = Logos.defaultLogger) {
     this.requestedAttrs = {};
     this.logger = logger;
   }
@@ -57,9 +61,12 @@ export class Logos {
     return this;
   }
 
-  static preset(name: keyof Presets): Elysia {
+  static preset(
+    name: keyof Presets,
+    logger: typeof Logos.defaultLogger = Logos.defaultLogger
+  ): Elysia {
     const { uses, format } = presetDef[name];
-    return new Logos().use(uses).custom(format);
+    return new Logos(logger).use(uses).custom(format);
   }
 
   custom(format: (attr: Attribute) => string): Elysia {

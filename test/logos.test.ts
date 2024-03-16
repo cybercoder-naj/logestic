@@ -24,17 +24,14 @@ describe('Logos', () => {
         .get('/api/:id', () => 'Hello, World!')
         .listen(3000);
 
-      client = edenTreaty<typeof app>('http://localhost:3000');
+      client = edenTreaty<typeof app>('http://127.0.0.1:3000');
     });
 
     beforeEach(() => (logs = []));
 
-    it('Make a log on a request by default', async () => {
-      const { data } = await client.api['hi'].get({
-        $query: {
-          id: 1
-        }
-      });
+    it('Custom formatting', async () => {
+      await client.api['hi'].get();
+
       expect(logs.length).toBe(1);
       expect(logs[0]).toBe('GET /api/hi 0');
     });
@@ -46,26 +43,23 @@ describe('Logos', () => {
     let logs: string[] = [];
 
     beforeAll(() => {
-      const logger = Logos.preset('common');
+      const logger = Logos.preset('common', msg => logs.push(msg));
 
       app = new Elysia()
         .use(logger)
         .get('/api/:id', () => 'Hello, World!')
         .listen(3000);
 
-      client = edenTreaty<typeof app>('http://localhost:3000');
+      client = edenTreaty<typeof app>('http://127.0.0.1:3000');
     });
 
     beforeEach(() => (logs = []));
 
-    it('Make a log on a request by default', async () => {
-      const { data } = await client.api['hi'].get({
-        $query: {
-          id: 1
-        }
-      });
+    it('Preset formatting', async () => {
+      await client.api['hi'].get();
+
       expect(logs.length).toBe(1);
-      expect(logs[0]).toBe('GET /api/hi 0');
+      expect(logs[0]).toBe('<ip> GET /api/hi 200 0');
     });
   });
 });
