@@ -70,7 +70,9 @@ export class Logestic {
   }
 
   custom(format: (attr: Attribute) => string): Elysia {
-    return new Elysia().onAfterHandle(({ request, path, body, query, set }) => {
+    return new Elysia({
+      name: 'logestic'
+    }).onAfterHandle(({ request, path, body, query, set }) => {
       let attrs: Attribute = {};
       for (const key in this.requestedAttrs) {
         const k = key as keyof Attribute;
