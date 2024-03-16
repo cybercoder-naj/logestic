@@ -7,6 +7,12 @@
   "files": [
     "/dist"
   ],
+  "exports": {
+    "require": "./dist/index.js",
+    "import": "./dist/index.js",
+    "node": "./dist/index.js",
+    "default": "./dist/index.js"
+  },
   "keywords": [
     "logging",
     "logger",
@@ -22,15 +28,14 @@
   "license": "MIT",
   "module": "src/index.ts",
   "type": "module",
-  "dependencies": {
-    "elysia": "0.8.17"
-  },
   "devDependencies": {
     "@elysiajs/eden": "0.8.1",
-    "@types/bun": "latest"
+    "typescript": "^5.0.0",
+    "bun-types": "latest"
   },
   "peerDependencies": {
-    "typescript": "^5.0.0"
+    "typescript": "^5.0.0",
+    "elysia": "0.8.17"
   },
   "scripts": {
     "build": "rm -rf dist && bun build src/index.ts --outdir ./dist --target bun --minify --external elysia && tsc",

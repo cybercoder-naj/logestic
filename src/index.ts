@@ -31,19 +31,27 @@ const presetDef: Presets = {
   }
 };
 
+export const logester = (
+  logger: typeof Logestic.defaultLogger = Logestic.defaultLogger
+): Elysia => {
+  return new Logestic(logger).instance;
+};
+
 export class Logestic {
   private requestedAttrs: {
     [key in keyof Attribute]: boolean;
   };
   private logger: (msg: string) => void;
+  instance: Elysia;
 
-  private static defaultLogger = (msg: string): void => {
+  static defaultLogger = (msg: string): void => {
     console.log(msg);
   };
 
   constructor(logger: typeof Logestic.defaultLogger = Logestic.defaultLogger) {
     this.requestedAttrs = {};
     this.logger = logger;
+    this.instance = new Elysia({ name: 'logestic' });
   }
 
   use(attr: keyof Attribute): Logestic;
@@ -70,59 +78,63 @@ export class Logestic {
   }
 
   custom(format: (attr: Attribute) => string): Elysia {
-    return new Elysia({
-      name: 'logestic'
-    }).onAfterHandle(({ request, path, body, query, set }) => {
-      let attrs: Attribute = {};
-      for (const key in this.requestedAttrs) {
-        const k = key as keyof Attribute;
-        switch (k) {
-          case 'ip':
-            attrs.ip = request.headers.get('x-forwarded-for') || '<ip>';
-            break;
+    this.instance = this.instance.onAfterHandle(
+      ({ request, path, body, query, set }) => {
+        let attrs: Attribute = {};
+        for (const key in this.requestedAttrs) {
+          const k = key as keyof Attribute;
+          switch (k) {
+            case 'ip':
+              attrs.ip = request.headers.get('x-forwarded-for') || '<ip>';
+              break;
 
-          case 'method':
-            attrs.method = request.method;
-            break;
+            case 'method':
+              attrs.method = request.method;
+              break;
 
-          case 'path':
-            attrs.path = path;
-            break;
+            case 'path':
+              attrs.path = path;
+              break;
 
-          case 'body':
-            attrs.body = body;
-            break;
+            case 'body':
+              attrs.body = body;
+              break;
 
-          case 'query':
-            attrs.query = query;
-            break;
+            case 'query':
+              attrs.query = query;
+              break;
 
-          case 'time':
-            attrs.time = new Date();
-            break;
+            case 'time':
+              attrs.time = new Date();
+              break;
 
-          case 'contentLength':
-            attrs.contentLength = Number(request.headers.get('content-length'));
-            break;
+            case 'contentLength':
+              attrs.contentLength = Number(
+                request.headers.get('content-length')
+              );
+              break;
 
-          case 'status':
-            attrs.status = set.status;
-            break;
+            case 'status':
+              attrs.status = set.status;
+              break;
 
-          case 'referer':
-            attrs.referer = request.headers.get('referer') || '<referer>';
-            break;
+            case 'referer':
+              attrs.referer = request.headers.get('referer') || '<referer>';
+              break;
 
-          case 'userAgent':
-            attrs.userAgent =
-              request.headers.get('user-agent') || '<user-agent>';
-            break;
+            case 'userAgent':
+              attrs.userAgent =
+                request.headers.get('user-agent') || '<user-agent>';
+              break;
+          }
         }
-      }
 
-      const msg = format(attrs);
-      this.logger(msg);
-    });
+        const msg = format(attrs);
+        this.logger(msg);
+      }
+    );
+
+    return this.instance;
   }
 
   log(msg: string): void {
