@@ -1,0 +1,17 @@
+{
+  "name": "logos",
+  "module": "src/index.ts",
+  "devDependencies": {
+    "@elysiajs/eden": "0.8.1",
+    "@types/bun": "latest"
+  },
+  "peerDependencies": {
+    "typescript": "^5.0.0"
+  },
+  "type": "module",
+  "dependencies": {
+    "@sinclair/typebox": "0.32.15",
+    "chalk": "^5.3.0",
+    "elysia": "0.8.17"
+  }
+}
