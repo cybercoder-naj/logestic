@@ -1,5 +1,5 @@
 import { describe, it, expect, beforeAll, beforeEach } from 'bun:test';
-import { Elysia, t } from 'elysia';
+import { Elysia } from 'elysia';
 import { Logestic } from '../src';
 import { edenTreaty } from '@elysiajs/eden';
 
