@@ -1,42 +1,22 @@
+/**
+ * @fileoverview This module provides a logging utility for Elysia, a Node.js framework.
+ *   It allows for customizable logging of HTTP requests and responses.
+ */
+
 import Elysia, { Context } from 'elysia';
+import { Attribute, AttributeMap, Presets } from './types';
+import presets from './presets';
 
-export type Attribute = {
-  ip?: string;
-  method?: string;
-  path?: string;
-  body?: any;
-  query?: Record<string, string | undefined>;
-  time?: Date;
-  contentLength?: number;
-  status?: any;
-  referer?: string;
-  userAgent?: string;
-};
+export type { Attribute };
 
-type PresetValue = {
-  uses: (keyof Attribute)[];
-  format: (attr: Attribute) => string;
-};
-
-type Presets = {
-  common: PresetValue;
-};
-
-type AttrBitMap = {
-  [key in keyof Attribute]: boolean;
-};
-
-const presetDef: Presets = {
-  common: {
-    uses: ['ip', 'method', 'path', 'status', 'contentLength'],
-    format: ({ ip, method, path, status, contentLength }) => {
-      return `${ip} ${method} ${path} ${status} ${contentLength}`;
-    }
-  }
-};
-
-const buildAttrs = (ctx: Context, reqAttrs: AttrBitMap): Attribute => {
-  const { request, path, body, query, set } = ctx;  
+/**
+ * Builds an attribute object containing the requested attributes from the context.
+ * @param ctx - The context of the current request.
+ * @param reqAttrs - A map of requested attributes.
+ * @returns An object containing the requested attributes.
+ */
+const buildAttrs = (ctx: Context, reqAttrs: AttributeMap): Attribute => {
+  const { request, path, body, query, set } = ctx;
 
   let attrs: Attribute = {};
   for (const key in reqAttrs) {
@@ -67,9 +47,7 @@ const buildAttrs = (ctx: Context, reqAttrs: AttrBitMap): Attribute => {
         break;
 
       case 'contentLength':
-        attrs.contentLength = Number(
-          request.headers.get('content-length')
-        );
+        attrs.contentLength = Number(request.headers.get('content-length'));
         break;
 
       case 'status':
@@ -81,15 +59,17 @@ const buildAttrs = (ctx: Context, reqAttrs: AttrBitMap): Attribute => {
         break;
 
       case 'userAgent':
-        attrs.userAgent =
-          request.headers.get('user-agent') || '<user-agent?>';
+        attrs.userAgent = request.headers.get('user-agent') || '<user-agent?>';
         break;
     }
   }
 
   return attrs;
-}
+};
 
+/**
+ * Logestic class provides methods to configure and perform logging.
+ */
 export class Logestic {
   private requestedAttrs: {
     [key in keyof Attribute]: boolean;
@@ -100,11 +80,20 @@ export class Logestic {
     console.log(msg);
   };
 
+  /**
+   * Constructs a new Logestic instance.
+   * @param logger - A custom logger function. Defaults to the console logger.
+   */
   constructor(logger: typeof Logestic.defaultLogger = Logestic.defaultLogger) {
     this.requestedAttrs = {};
     this.logger = logger;
   }
 
+  /**
+   * Requests Logestic to provide a particular attribute.
+   * @param attrs - An attribute key or an array of attribute keys.
+   * @returns The Logestic instance for chaining.
+   */
   use(attr: keyof Attribute): Logestic;
   use(attrs: (keyof Attribute)[]): Logestic;
   use(attrs: keyof Attribute | (keyof Attribute)[]): Logestic {
@@ -120,14 +109,25 @@ export class Logestic {
     return this;
   }
 
+  /**
+   * Creates a new Elysia instance with a preset logging configuration.
+   * @param name - The name of the preset to use.
+   * @param logger - A custom logger function. Defaults to the console logger.
+   * @returns A new Elysia instance.
+   */
   static preset(
     name: keyof Presets,
     logger: typeof Logestic.defaultLogger = Logestic.defaultLogger
   ): Elysia {
-    const { uses, format } = presetDef[name];
+    const { uses, format } = presets[name];
     return new Logestic(logger).use(uses).custom(format);
   }
 
+  /**
+   * Configures a custom logging format and attaches it to the Elysia instance.
+   * @param format - A function that takes an Attribute object and returns a string.
+   * @returns A new Elysia instance.
+   */
   custom(format: (attr: Attribute) => string): Elysia {
     return new Elysia()
       .onAfterHandle({ as: 'global' }, ctx => {
@@ -136,12 +136,14 @@ export class Logestic {
         this.log(msg);
       })
       .onError({ as: 'global' }, ({ request, error }) => {
-        this.log(
-          `Error: ${request.method} ${request.url} ${error.message}`
-        );
+        this.log(`Error: ${request.method} ${request.url} ${error.message}`);
       });
   }
 
+  /**
+   * Logs a message using the configured logger function.
+   * @param msg - The message to log.
+   */
   log(msg: string): void {
     this.logger(msg);
   }

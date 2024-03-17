@@ -1,6 +1,6 @@
 {
   "name": "logestic",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "author": "Nishant Aanjaney Jalan <cybercoder.nishant@gmail.com>",
   "description": "An advanced and customisable logging library for ElysiaJS",
   "keywords": [
@@ -24,7 +24,7 @@
   "module": "src/index.ts",
   "type": "module",
   "scripts": {
-    "build": "rimraf dist && tsc",
+    "build": "rimraf dist && bun build src/index.ts --outdir dist --target bun --minify -e elysia && tsc",
     "test": "bun test"
   },
   "peerDependencies": {

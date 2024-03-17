@@ -32,6 +32,7 @@ describe('Logestic', () => {
     it('Custom formatting', async () => {
       await client.api['hi'].get();
 
+      console.log('Custom logs', logs);
       expect(logs.length).toBe(1);
       expect(logs[0]).toBe('GET /api/hi 0');
     });
@@ -59,7 +60,7 @@ describe('Logestic', () => {
       await client.api['hi'].get();
 
       expect(logs.length).toBe(1);
-      expect(logs[0]).toBe('<ip> GET /api/hi 200 0');
+      expect(logs[0]).toBe('<ip?> GET /api/hi 200 0');
     });
   });
 });
