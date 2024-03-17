@@ -1,7 +1,6 @@
 {
   "name": "logestic",
-  "version": "0.0.5",
-  "license": "MIT",
+  "version": "0.1.0",
   "author": "Nishant Aanjaney Jalan <cybercoder.nishant@gmail.com>",
   "description": "An advanced and customisable logging library for ElysiaJS",
   "keywords": [
@@ -12,20 +11,16 @@
     "middleware"
   ],
   "homepage": "https://github.com/cybercoder-naj/logestic.git",
+  "bugs": "https://github.com/cybercoder-naj/logestic/issues",
+  "license": "MIT",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/cybercoder-naj/logestic.git"
   },
-  "bugs": "https://github.com/cybercoder-naj/logestic/issues",
-  "files": ["dist"],
-  "exports": {
-    ".": {
-      "import": "./src/index.ts",
-      "require": "./dist/index.js",
-      "bun": "./dist/index.ts",
-      "types": "./dist/index.d.ts"
-    }
-  },
+  "files": [
+    "dist"
+  ],
+  "main": "dist/index.js",
   "module": "src/index.ts",
   "type": "module",
   "scripts": {
@@ -37,10 +32,11 @@
     "elysia": "^1.0.0"
   },
   "devDependencies": {
-    "@elysiajs/eden": "0.8.1",
+    "@elysiajs/eden": "1.0.0",
     "bun-types": "latest",
     "rimraf": "^5.0.5",
-    "typescript": "^5.0.0"
+    "typescript": "^5.0.0",
+    "elysia": "^1.0.0"
   },
   "publishConfig": {
     "access": "public"
