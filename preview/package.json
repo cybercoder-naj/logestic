@@ -1,0 +1,23 @@
+{
+  "name": "@logestic/preview",
+  "version": "0.0.1",
+  "description": "",
+  "main": "src/index.ts",
+  "scripts": {
+    "dev": "bun --watch run src/index.ts"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/cybercoder-naj/logestic.git"
+  },
+  "author": "Nishant Aanjaney Jalan",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/cybercoder-naj/logestic/issues"
+  },
+  "homepage": "https://github.com/cybercoder-naj/logestic#readme",
+  "dependencies": {
+    "elysia": "^1.0.0",
+    "logestic": ".."
+  }
+}
