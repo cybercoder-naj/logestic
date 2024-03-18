@@ -1,6 +1,6 @@
 # Logestic
 
-An advanced and customisable logging library for ElysiaJS
+An advanced and customisable logging library for [ElysiaJS](https://elysiajs.com).
 
 ## Table of Contents
 
@@ -28,7 +28,7 @@ There are two ways to add logging to your Elysia application.
 
 ### Preset request logging
 
-Currently there are these [presets](./src/presets/index.ts) availble to use. 
+Currently, there are these [presets](./src/presets/index.ts) available to use. 
 
 ```typescript
 import { Elysia } from 'elysia';
@@ -46,22 +46,22 @@ If you don't like any of presets, you can configure Logestic to log your request
 
 1. Create a `Logestic` instance, optionally where you wish to log.
 2. Call `use` to tell `Logestic` the information you wish to use.
-3. Finally, create an `Elysia` instance on `custom` with the formating function. 
+3. Finally, create an `Elysia` instance on `custom` with the formatting function. 
 
 ```typescript
 // ./logger.ts
 import { Logestic } from 'logestic';
 
 // exports an Elysia instance
-export new Logestic(Bun.file('request.log'))
+export default new Logestic(Bun.file('request.log'))
   .use(['method', 'path', 'time', 'status'])
   .custom(({ method, path, time, status }) => {
     return `[${time}]: ${method} ${path} | ${status}`
-  })
+  });
 
 
 // ./index.ts
-import myLogger from './logger'
+import myLogger from './logger';
 
 const app = new Elysia()
   .use(myLogger)
@@ -69,7 +69,7 @@ const app = new Elysia()
   .listen(5566);
 ```
 
-Consider contibuting your own preset; check [contributing guidelines](#contributing-guidelines).
+Consider contributing your own preset; check [contributing guidelines](#contributing-guidelines).
 
 ## Contributing Guidelines
 
