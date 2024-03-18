@@ -7,8 +7,10 @@ import Elysia, { Context } from 'elysia';
 import { Attribute, AttributeMap, Presets } from './types';
 import presets from './presets';
 import { BunFile } from 'bun';
+import c from 'chalk';
 
 export type { Attribute };
+export const chalk = c; // Re-export chalk for custom formatting
 
 /**
  * Builds an attribute object containing the requested attributes from the context.
