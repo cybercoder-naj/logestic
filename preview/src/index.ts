@@ -1,7 +1,7 @@
 import { Elysia } from 'elysia';
 import { Logestic } from 'logestic';
 
-const logger = new Logestic(Bun.file('./request.log'))
+const logger = new Logestic()
   .use('ip')
   .use('method')
   .use('path')

@@ -141,8 +141,11 @@ export class Logestic {
   async log(msg: string): Promise<void> {
     let content: string | undefined = undefined;
     if (this.dest !== Bun.stdout) {
+      // Create the file if it doesn't exist
       if (!(await this.dest.exists())) {
         Bun.write(this.dest, '');
+        // Once the file is written to, this.dest needs to be reinitialized
+        this.dest = Bun.file(this.dest.name!!);
       }
       content = await this.dest.text();
     }
