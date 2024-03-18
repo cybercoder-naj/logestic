@@ -16,17 +16,8 @@ An advanced and customisable logging library for ElysiaJS
 
 ## Installation
 
-Add the package with your favourite package manager to your Elysia Project. 
+Add the package to your Elysia Project. 
 ```bash
-  npm install --save logestic
-
-  # or
-  yarn add logestic
-
-  # or
-  pnpm add logestic
-
-  # or
   bun add logestic
 ```
 **Note**: You must have `elysia@1.0` installed in your project.
@@ -61,16 +52,8 @@ If you don't like any of presets, you can configure Logestic to log your request
 // ./logger.ts
 import { Logestic } from 'logestic';
 
-const fileLogger = (msg: string) => {
-  const logFile = Bun.file('requests.log');
-  const writer = logFile.writer();
-
-  writer.write(msg);
-  writer.flush();
-}
-
 // exports an Elysia instance
-export new Logestic(fileLogger)
+export new Logestic(Bun.file('request.log'))
   .use(['method', 'path', 'time', 'status'])
   .custom(({ method, path, time, status }) => {
     return `[${time}]: ${method} ${path} | ${status}`

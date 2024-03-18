@@ -141,13 +141,15 @@ export class Logestic {
   async log(msg: string): Promise<void> {
     let content: string | undefined = undefined;
     if (this.dest !== Bun.stdout) {
+      if (!(await this.dest.exists())) {
+        Bun.write(this.dest, '');
+      }
       content = await this.dest.text();
     }
 
     const writer = this.dest.writer();
     if (content) {
       writer.write(content);
-      writer.write('\n');
     }
     writer.write(msg);
     writer.write('\n');
