@@ -6,6 +6,7 @@
 import Elysia, { Context } from 'elysia';
 import { Attribute, AttributeMap, Presets } from './types';
 import presets from './presets';
+import { BunFile } from 'bun';
 
 export type { Attribute };
 
@@ -74,19 +75,15 @@ export class Logestic {
   private requestedAttrs: {
     [key in keyof Attribute]: boolean;
   };
-  private logger: (msg: string) => void;
-
-  private static defaultLogger = (msg: string): void => {
-    console.log(msg);
-  };
+  private dest: BunFile;
 
   /**
    * Constructs a new Logestic instance.
-   * @param logger - A custom logger function. Defaults to the console logger.
+   * @param dest - A custom logger function. Defaults to the console logger.
    */
-  constructor(logger: typeof Logestic.defaultLogger = Logestic.defaultLogger) {
+  constructor(dest: BunFile = Bun.stdout) {
     this.requestedAttrs = {};
-    this.logger = logger;
+    this.dest = dest;
   }
 
   /**
@@ -112,15 +109,12 @@ export class Logestic {
   /**
    * Creates a new Elysia instance with a preset logging configuration.
    * @param name - The name of the preset to use.
-   * @param logger - A custom logger function. Defaults to the console logger.
+   * @param dest - A custom logger function. Defaults to the console logger.
    * @returns A new Elysia instance.
    */
-  static preset(
-    name: keyof Presets,
-    logger: typeof Logestic.defaultLogger = Logestic.defaultLogger
-  ): Elysia {
+  static preset(name: keyof Presets, dest: BunFile = Bun.stdout): Elysia {
     const { uses, format } = presets[name];
-    return new Logestic(logger).use(uses).custom(format);
+    return new Logestic(dest).use(uses).custom(format);
   }
 
   /**
@@ -144,7 +138,19 @@ export class Logestic {
    * Logs a message using the configured logger function.
    * @param msg - The message to log.
    */
-  log(msg: string): void {
-    this.logger(msg);
+  async log(msg: string): Promise<void> {
+    let content: string | undefined = undefined;
+    if (this.dest !== Bun.stdout) {
+      content = await this.dest.text();
+    }
+
+    const writer = this.dest.writer();
+    if (content) {
+      writer.write(content);
+      writer.write('\n');
+    }
+    writer.write(msg);
+    writer.write('\n');
+    writer.flush();
   }
 }
