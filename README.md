@@ -40,6 +40,10 @@ const app = new Elysia()
   .listen(5566);
 ```
 
+#### Output:
+
+![Custom Preset](./screenshots/custom-preset.png)
+
 ### Custom request logging
 
 If you don't like any of presets, you can configure Logestic to log your requests in your way.
