@@ -61,7 +61,7 @@ import { Logestic } from 'logestic';
 // exports an Elysia instance
 export default new Logestic(Bun.file('request.log'))
   .use(['method', 'path', 'time', 'status'])
-  .custom(({ method, path, time, status }) => {
+  .format(({ method, path, time, status }) => {
     return `[${time}]: ${method} ${path} | ${status}`
   });
 
