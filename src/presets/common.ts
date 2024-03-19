@@ -3,7 +3,7 @@ import chalk from 'chalk';
 
 const preset: PresetValue = {
   uses: ['time', 'method', 'path', 'status'],
-  format: ({ time, method, path, status }) => {
+  formatAttr: ({ time, method, path, status }) => {
     const grayTime = chalk.gray(`[${time!!.toISOString()}]`);
     const methodPath = chalk.cyan(`${method} ${path}`);
     let statusColor = chalk.white;

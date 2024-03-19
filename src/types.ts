@@ -39,7 +39,7 @@ export type AttributeMap = {
  */
 export type PresetValue = {
   uses: (keyof Attribute)[]; // An array of keys from `Attribute` that are used in this preset
-  format: (attr: Attribute) => string; // A function that formats the log entry
+  formatAttr: (attr: Attribute) => string; // A function that formats the log entry
 };
 
 /**

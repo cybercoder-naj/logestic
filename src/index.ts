@@ -81,11 +81,28 @@ export class Logestic {
 
   /**
    * Constructs a new Logestic instance.
-   * @param dest - A custom logger function. Defaults to the console logger.
+   * @param dest - Destination of the logs, Defaults to the console logger.
    */
   constructor(dest: BunFile = Bun.stdout) {
     this.requestedAttrs = {};
-    this.dest = dest;
+
+    if (dest === Bun.stdin) {
+      throw new Error(
+        'Cannot log to stdin. Please provide a writable destination.'
+      );
+    }
+    this.dest = this.createFileIfNotExists(dest);
+  }
+
+  private createFileIfNotExists(dest: BunFile): BunFile {
+    if (dest === Bun.stdout || dest === Bun.stderr) {
+      return dest;
+    }
+
+    if (!dest.exists()) {
+      Bun.write(dest, '');
+    }
+    return dest;
   }
 
   /**
@@ -115,20 +132,20 @@ export class Logestic {
    * @returns A new Elysia instance.
    */
   static preset(name: keyof Presets, dest: BunFile = Bun.stdout): Elysia {
-    const { uses, format } = presets[name];
-    return new Logestic(dest).use(uses).custom(format);
+    const { uses, formatAttr } = presets[name];
+    return new Logestic(dest).use(uses).format(formatAttr);
   }
 
   /**
    * Configures a custom logging format and attaches it to the Elysia instance.
-   * @param format - A function that takes an Attribute object and returns a string.
+   * @param formatAttr - A function that takes an Attribute object and returns a string.
    * @returns A new Elysia instance.
    */
-  custom(format: (attr: Attribute) => string): Elysia {
+  format(formatAttr: (attr: Attribute) => string): Elysia {
     return new Elysia()
       .onAfterHandle({ as: 'global' }, ctx => {
         let attrs = buildAttrs(ctx, this.requestedAttrs);
-        const msg = format(attrs);
+        const msg = formatAttr(attrs);
         this.log(msg);
       })
       .onError({ as: 'global' }, ({ request, error }) => {
@@ -143,12 +160,6 @@ export class Logestic {
   async log(msg: string): Promise<void> {
     let content: string | undefined = undefined;
     if (this.dest !== Bun.stdout) {
-      // Create the file if it doesn't exist
-      if (!(await this.dest.exists())) {
-        Bun.write(this.dest, '');
-        // Once the file is written to, this.dest needs to be reinitialized
-        this.dest = Bun.file(this.dest.name!!);
-      }
       content = await this.dest.text();
     }
 
