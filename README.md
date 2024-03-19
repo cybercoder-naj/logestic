@@ -1,5 +1,7 @@
 # Logestic
 
+[![npm version](https://badge.fury.io/js/logestic.svg)](https://badge.fury.io/js/logestic)
+
 An advanced and customisable logging library for [ElysiaJS](https://elysiajs.com).
 
 ## Table of Contents
