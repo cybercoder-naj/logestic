@@ -1,5 +1,7 @@
 # Logestic
 
+[![npm version](https://badge.fury.io/js/logestic.svg)](https://badge.fury.io/js/logestic)
+
 An advanced and customisable logging library for [ElysiaJS](https://elysiajs.com).
 
 ## Table of Contents
@@ -39,6 +41,10 @@ const app = new Elysia()
   .get('/', () => "Hello from server")
   .listen(5566);
 ```
+
+#### Output:
+
+![Custom Preset](./screenshots/custom-preset.png)
 
 ### Custom request logging
 

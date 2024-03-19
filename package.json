@@ -1,6 +1,6 @@
 {
   "name": "logestic",
-  "version": "0.1.2",
+  "version": "0.2.0",
   "author": "Nishant Aanjaney Jalan <cybercoder.nishant@gmail.com>",
   "description": "An advanced and customisable logging library for ElysiaJS",
   "keywords": [
@@ -40,5 +40,8 @@
   },
   "publishConfig": {
     "access": "public"
+  },
+  "dependencies": {
+    "chalk": "^5.3.0"
   }
 }
