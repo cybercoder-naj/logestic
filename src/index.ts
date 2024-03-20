@@ -162,7 +162,7 @@ export class Logestic {
    */
   async log(msg: string): Promise<void> {
     let content: string | undefined = undefined;
-    if (this.dest !== Bun.stdout) {
+    if (this.dest !== Bun.stdout && this.dest !== Bun.stderr) {
       content = await this.dest.text();
     }
 
