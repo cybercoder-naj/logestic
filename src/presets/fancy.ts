@@ -13,7 +13,7 @@ const getDateTimeString = (date: Date) => {
 
 const preset: PresetValue = {
   uses: ['time', 'method', 'path'],
-  formatAttr: ({ time, method, path }) => {
+  formatAttr: ({ attrs: { time, method, path } }) => {
     const dateTime = getDateTimeString(time!!);
     const methodPath = chalk.cyan(`${method} ${path}`);
 

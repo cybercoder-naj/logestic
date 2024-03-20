@@ -18,12 +18,15 @@ export const chalk = c; // Re-export chalk for custom formatting
  * @param reqAttrs - A map of requested attributes.
  * @returns An object containing the requested attributes.
  */
-const buildAttrs = (ctx: Context, reqAttrs: AttributeMap): Attribute => {
+const buildAttrs = (
+  ctx: Context,
+  reqAttrs: AttributeMap
+): Partial<Record<Attribute, any>> => {
   const { request, path, body, query, set } = ctx;
 
-  let attrs: Attribute = {};
+  let attrs: Partial<Record<Attribute, any>> = {};
   for (const key in reqAttrs) {
-    const k = key as keyof Attribute;
+    const k = key as Attribute;
     switch (k) {
       case 'ip':
         attrs.ip = request.headers.get('x-forwarded-for') || '<ip?>';
@@ -74,9 +77,7 @@ const buildAttrs = (ctx: Context, reqAttrs: AttributeMap): Attribute => {
  * Logestic class provides methods to configure and perform logging.
  */
 export class Logestic {
-  private requestedAttrs: {
-    [key in keyof Attribute]: boolean;
-  };
+  private requestedAttrs: AttributeMap;
   private dest: BunFile;
 
   /**
@@ -110,9 +111,9 @@ export class Logestic {
    * @param attrs - An attribute key or an array of attribute keys.
    * @returns The Logestic instance for chaining.
    */
-  use(attr: keyof Attribute): Logestic;
-  use(attrs: (keyof Attribute)[]): Logestic;
-  use(attrs: keyof Attribute | (keyof Attribute)[]): Logestic {
+  use(attr: Attribute): Logestic;
+  use(attrs: Attribute[]): Logestic;
+  use(attrs: Attribute | Attribute[]): Logestic {
     if (Array.isArray(attrs)) {
       for (const attr of attrs) {
         this.requestedAttrs[attr] = true;
@@ -141,11 +142,13 @@ export class Logestic {
    * @param formatAttr - A function that takes an Attribute object and returns a string.
    * @returns A new Elysia instance.
    */
-  format(formatAttr: (attr: Attribute) => string): Elysia {
+  format(
+    formatAttr: (_: { attrs: Partial<Record<Attribute, any>> }) => string
+  ): Elysia {
     return new Elysia()
       .onAfterHandle({ as: 'global' }, ctx => {
         let attrs = buildAttrs(ctx, this.requestedAttrs);
-        const msg = formatAttr(attrs);
+        const msg = formatAttr({ attrs });
         this.log(msg);
       })
       .onError({ as: 'global' }, ({ request, error }) => {
