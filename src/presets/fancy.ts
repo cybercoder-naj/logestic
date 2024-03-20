@@ -1,5 +1,6 @@
-import { PresetValue } from '../types';
+// import { PresetValue } from '../types';
 import chalk from 'chalk';
+import { Logestic } from '..';
 
 const getDateTimeString = (date: Date) => {
   const year = date.getFullYear();
@@ -11,14 +12,11 @@ const getDateTimeString = (date: Date) => {
   return chalk.gray(`${day}/${month}/${year} ${hours}:${minutes}:${seconds}`);
 };
 
-const preset: PresetValue = {
-  uses: ['time', 'method', 'path'],
-  formatAttr: ({ attrs: { time, method, path } }) => {
+export default new Logestic()
+  .use(['time', 'method', 'path'])
+  .format(({ attrs: { time, method, path } }) => {
     const dateTime = getDateTimeString(time!!);
     const methodPath = chalk.cyan(`${method} ${path}`);
 
     return `${dateTime} ${methodPath}`;
-  }
-};
-
-export default preset;
+  });

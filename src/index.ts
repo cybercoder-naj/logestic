@@ -3,11 +3,13 @@
  *   It allows for customizable logging of HTTP requests and responses.
  */
 
-import Elysia, { Context } from 'elysia';
-import { Attribute, AttributeMap, Presets } from './types';
+import Elysia, { type Context } from 'elysia';
+import type { Attribute, AttributeMap, Preset } from './types';
 import presets from './presets';
 import { BunFile } from 'bun';
 import c from 'chalk';
+import { Type, type Static, type TSchema } from '@sinclair/typebox';
+import { getAttributeType } from './utils';
 
 export type { Attribute };
 export const chalk = c; // Re-export chalk for custom formatting
@@ -22,7 +24,7 @@ const buildAttrs = (
   ctx: Context,
   reqAttrs: AttributeMap
 ): Partial<Record<Attribute, any>> => {
-  const { request, path, body, query, set } = ctx;
+  const { request, path, body, set } = ctx;
 
   let attrs: Partial<Record<Attribute, any>> = {};
   for (const key in reqAttrs) {
@@ -42,10 +44,6 @@ const buildAttrs = (
 
       case 'body':
         attrs.body = body;
-        break;
-
-      case 'query':
-        attrs.query = query;
         break;
 
       case 'time':
@@ -76,16 +74,18 @@ const buildAttrs = (
 /**
  * Logestic class provides methods to configure and perform logging.
  */
-export class Logestic {
+export class Logestic<T extends TSchema> {
   private requestedAttrs: AttributeMap;
   private dest: BunFile;
+  private type: T;
 
   /**
    * Constructs a new Logestic instance.
    * @param dest - Destination of the logs, Defaults to the console logger.
    */
-  constructor(dest: BunFile = Bun.stdout) {
+  constructor(dest: BunFile = Bun.stdout, type: T) {
     this.requestedAttrs = {};
+    this.type = type;
 
     if (dest === Bun.stdin) {
       throw new Error(
@@ -111,19 +111,25 @@ export class Logestic {
    * @param attrs - An attribute key or an array of attribute keys.
    * @returns The Logestic instance for chaining.
    */
-  use(attr: Attribute): Logestic;
-  use(attrs: Attribute[]): Logestic;
-  use(attrs: Attribute | Attribute[]): Logestic {
+  use<NewT extends TSchema>(attr: Attribute): Logestic<NewT>;
+  use<NewT extends TSchema>(attrs: Attribute[]): Logestic<NewT>;
+  use<NewT extends TSchema>(attrs: Attribute | Attribute[]): Logestic<NewT> {
     if (Array.isArray(attrs)) {
-      for (const attr of attrs) {
-        this.requestedAttrs[attr] = true;
-      }
-      return this;
+      // for (const attr of attrs) {
+      //   this.requestedAttrs[attr] = true;
+      // }
+      // return this;
+      throw new Error('Not implemented');
     }
 
     // Single attribute
-    this.requestedAttrs[attrs] = true;
-    return this;
+    const attr = attrs;
+    const currentType = this.type;
+    const newType = Type.Composite([
+      currentType,
+      getAttributeType(attr)
+    ]) as unknown as NewT;
+    return new Logestic(this.dest, newType);
   }
 
   /**
@@ -132,9 +138,9 @@ export class Logestic {
    * @param dest - A custom logger function. Defaults to the console logger.
    * @returns A new Elysia instance.
    */
-  static preset(name: keyof Presets, dest: BunFile = Bun.stdout): Elysia {
-    const { uses, formatAttr } = presets[name];
-    return new Logestic(dest).use(uses).format(formatAttr);
+  static preset(name: keyof Preset, dest: BunFile = Bun.stdout): Elysia {
+    const preset = presets[name];
+    return preset(dest);
   }
 
   /**
@@ -142,9 +148,7 @@ export class Logestic {
    * @param formatAttr - A function that takes an Attribute object and returns a string.
    * @returns A new Elysia instance.
    */
-  format(
-    formatAttr: (_: { attrs: Partial<Record<Attribute, any>> }) => string
-  ): Elysia {
+  format(formatAttr: (_: { attrs: Static<T> }) => string): Elysia {
     return new Elysia()
       .onAfterHandle({ as: 'global' }, ctx => {
         let attrs = buildAttrs(ctx, this.requestedAttrs);

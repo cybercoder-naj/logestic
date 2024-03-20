@@ -1,19 +1,32 @@
-import { PresetValue } from '../types';
+import Elysia from 'elysia';
+import { Logestic } from '..';
 import chalk from 'chalk';
+import { Type } from '@sinclair/typebox';
 
-const preset: PresetValue = {
-  uses: ['time', 'method', 'path', 'status'],
-  formatAttr: ({ attrs: { time, method, path, status } }) => {
-    const grayTime = chalk.gray(`[${time!!.toISOString()}]`);
-    const methodPath = chalk.cyan(`${method} ${path}`);
-    let statusColor = chalk.white;
+const common: Elysia = new Logestic(
+  Bun.stdout,
+  Type.Object({
+    time: Type.String(),
+    method: Type.String(),
+    path: Type.String(),
+    status: Type.Number()
+  })
+)
+  .use('time')
+  .use('method')
+  .use('path')
+  .format(({ attrs: { time, method, path } }) => {
+    return '';
+  });
 
-    if (200 <= status && status < 300) statusColor = chalk.green;
-    if (400 <= status && status < 500) statusColor = chalk.yellow;
-    if (500 <= status) statusColor = chalk.red;
+export default common;
 
-    return `[${grayTime}] ${methodPath} ${statusColor(status)}`;
-  }
-};
+// const grayTime = chalk.gray(`[${time!!.toISOString()}]`);
+// const methodPath = chalk.cyan(`${method} ${path}`);
+// let statusColor = chalk.white;
 
-export default preset;
+// if (200 <= status && status < 300) statusColor = chalk.green;
+// if (400 <= status && status < 500) statusColor = chalk.yellow;
+// if (500 <= status) statusColor = chalk.red;
+
+// return `[${grayTime}] ${methodPath} ${statusColor(status)}`;
