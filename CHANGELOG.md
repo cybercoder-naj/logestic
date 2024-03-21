@@ -5,6 +5,7 @@
 
 ### Changed
 - **BREAKING CHANGE**: `Logestic` accepts an options object instead of a destination file.
+- **BREAKING CHANGE**: `log` is a private function. Replace all usages of `log` function with `info` function.
 - Presets definition returns an `Elysia` instance.
 
 ## [0.4.0] - 21-03-2024
