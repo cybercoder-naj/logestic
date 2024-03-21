@@ -1,4 +1,11 @@
 # CHANGELOG
+## [0.5.0] - TODO
+### Added
+- Origin/level of the log message, 'HTTP', 'ERROR', 'WARN', 'DEBUG', 'INFO'
+
+### Changed
+- **BREAKING CHANGE**: `Logestic` accepts an options object instead of a destination file.
+- Presets definition returns an `Elysia` instance.
 
 ## [0.4.0] - 21-03-2024
 ### Added
