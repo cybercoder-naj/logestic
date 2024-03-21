@@ -1,7 +1,8 @@
 # CHANGELOG
 ## [0.5.0] - TODO
 ### Added
-- Origin/level of the log message, 'HTTP', 'ERROR', 'WARN', 'DEBUG', 'INFO'
+- Origin/level of the log message, 'HTTP', 'ERROR', 'WARN', 'DEBUG', 'INFO'.
+- `info`, `warn`, `debug`, `error` functions are added for custom logging throughout the application.
 
 ### Changed
 - **BREAKING CHANGE**: `Logestic` accepts an options object instead of a destination file.

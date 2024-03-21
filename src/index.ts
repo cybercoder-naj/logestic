@@ -140,10 +140,46 @@ export class Logestic {
    * Logs a message to the destination.
    * @param msg - The message to log.
    */
-  async info(msg: string): Promise<void> {
+  info(msg: string): void {
     let _msg = msg;
     if (this.showType) {
       _msg = `${colourLogType('INFO')} ${msg}`;
+    }
+    this.log(_msg);
+  }
+
+  /**
+   * Logs a warning message to the destination.
+   * @param msg - The message to log.
+   */
+  warn(msg: string): void {
+    let _msg = msg;
+    if (this.showType) {
+      _msg = `${colourLogType('WARN')} ${msg}`;
+    }
+    this.log(_msg);
+  }
+
+  /**
+   * Logs a debug message to the destination.
+   * @param msg - The message to log.
+   */
+  debug(msg: string): void {
+    let _msg = msg;
+    if (this.showType) {
+      _msg = `${colourLogType('DEBUG')} ${msg}`;
+    }
+    this.log(_msg);
+  }
+
+  /**
+   * Logs an error message to the destination.
+   * @param msg - The message to log.
+   */
+  error(msg: string): void {
+    let _msg = msg;
+    if (this.showType) {
+      _msg = `${colourLogType('ERROR')} ${msg}`;
     }
     this.log(_msg);
   }
