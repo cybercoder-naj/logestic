@@ -149,7 +149,8 @@ export class Logestic {
         this.log(msg);
       })
       .onError({ as: 'global' }, ({ request, error, code }) => {
-        const msg = formatAttr.onFailure({ request, error, code });
+        let datetime = new Date();
+        const msg = formatAttr.onFailure({ request, error, code, datetime });
         this.log(msg);
       });
   }

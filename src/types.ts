@@ -27,6 +27,7 @@ export type ErrorAttribute = {
   request: Request;
   error: Error;
   code: any; // either string description or number
+  datetime: Date;
 };
 
 /**

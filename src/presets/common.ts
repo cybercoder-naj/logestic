@@ -4,8 +4,8 @@ import chalk from 'chalk';
 const preset: PresetValue = {
   uses: ['time', 'method', 'path', 'status'],
   formatAttr: {
-    onSuccess: ({ time, method, path, status }) => {
-      const grayTime = chalk.gray(`[${time!!.toISOString()}]`);
+    onSuccess({ time, method, path, status }) {
+      const grayTime = chalk.gray(`${time!!.toISOString()}`);
       const methodPath = chalk.cyan(`${method} ${path}`);
       let statusColor = chalk.white;
 
@@ -15,7 +15,13 @@ const preset: PresetValue = {
 
       return `[${grayTime}] ${methodPath} ${statusColor(status)}`;
     },
-    onFailure: () => ''
+    onFailure({ request, error, code, datetime }) {
+      const grayTime = chalk.gray(`${datetime.toISOString()}`);
+      const msg = chalk.red(
+        `Error: ${request.method} ${request.url} ${error.message} ${code}`
+      );
+      return `[${grayTime}] ${msg}`;
+    }
   }
 };
 
