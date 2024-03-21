@@ -4,7 +4,7 @@
  */
 
 import Elysia from 'elysia';
-import { Attribute, FormatObj, Presets } from './types';
+import { Attribute, FormatObj, LogesticOptions, Presets } from './types';
 import presets from './presets';
 import { BunFile } from 'bun';
 import c from 'chalk';
@@ -12,11 +12,6 @@ import { buildAttrs, colourLogType } from './utils';
 
 export type { Attribute };
 export const chalk = c; // Re-export chalk for custom formatting
-
-export type LogesticOptions = {
-  dest?: BunFile;
-  showType?: boolean;
-};
 
 /**
  * Logestic class provides methods to configure and perform logging.
@@ -98,8 +93,7 @@ export class Logestic {
     name: keyof Presets,
     options: LogesticOptions = Logestic.defaultOptions
   ): Elysia {
-    const { uses, formatAttr } = presets[name];
-    return new Logestic(options).use(uses).format(formatAttr);
+    return presets[name](options);
   }
 
   /**
