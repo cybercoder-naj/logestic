@@ -3,102 +3,60 @@
  *   It allows for customizable logging of HTTP requests and responses.
  */
 
-import Elysia, { type Context } from 'elysia';
-import { Attribute, AttributeMap, FormatObj, Presets } from './types';
+import Elysia from 'elysia';
+import { Attribute, FormatObj, LogesticOptions, Presets } from './types';
 import presets from './presets';
 import { BunFile } from 'bun';
 import c from 'chalk';
+import { buildAttrs, colourLogType } from './utils';
 
 export type { Attribute };
 export const chalk = c; // Re-export chalk for custom formatting
 
 /**
- * Builds an attribute object containing the requested attributes from the context.
- * @param ctx - The context of the current request.
- * @param reqAttrs - A map of requested attributes.
- * @returns An object containing the requested attributes.
- */
-const buildAttrs = (ctx: Context, reqAttrs: AttributeMap): Attribute => {
-  const { request, path, body, query, set } = ctx;
-
-  let attrs: Attribute = {};
-  for (const key in reqAttrs) {
-    const k = key as keyof Attribute;
-    switch (k) {
-      case 'ip':
-        attrs.ip = request.headers.get('x-forwarded-for') || '<ip?>';
-        break;
-
-      case 'method':
-        attrs.method = request.method;
-        break;
-
-      case 'path':
-        attrs.path = path;
-        break;
-
-      case 'body':
-        attrs.body = body;
-        break;
-
-      case 'query':
-        attrs.query = query;
-        break;
-
-      case 'time':
-        attrs.time = new Date();
-        break;
-
-      case 'contentLength':
-        attrs.contentLength = Number(request.headers.get('content-length'));
-        break;
-
-      case 'status':
-        attrs.status = set.status;
-        break;
-
-      case 'referer':
-        attrs.referer = request.headers.get('referer') || '<referer?>';
-        break;
-
-      case 'userAgent':
-        attrs.userAgent = request.headers.get('user-agent') || '<user-agent?>';
-        break;
-    }
-  }
-
-  return attrs;
-};
-
-/**
  * Logestic class provides methods to configure and perform logging.
  */
 export class Logestic {
+  private static defaultOptions: LogesticOptions = {
+    dest: Bun.stdout,
+    showLevel: false
+  };
+
   private requestedAttrs: {
     [key in keyof Attribute]: boolean;
   };
-  private dest: BunFile;
+  private dest!: BunFile;
+  private showType: boolean;
 
   /**
    * Constructs a new Logestic instance.
    * @param dest - Destination of the logs, Defaults to the console logger.
    */
-  constructor(dest: BunFile = Bun.stdout) {
+  constructor(options: LogesticOptions = Logestic.defaultOptions) {
     this.requestedAttrs = {};
+    this.showType = options.showLevel || false;
 
+    this.setDest(options.dest || Bun.stdout);
+  }
+
+  private setDest(dest: BunFile): void {
     if (dest === Bun.stdin) {
+      // Cannot log to stdin
       throw new Error(
         'Cannot log to stdin. Please provide a writable destination.'
       );
     }
+    if (dest === Bun.stdout || dest === Bun.stderr) {
+      // Use stdout or stderr
+      this.dest = dest;
+      return;
+    }
+
+    // Custom file destination
     this.dest = this.createFileIfNotExists(dest);
   }
 
   private createFileIfNotExists(dest: BunFile): BunFile {
-    if (dest === Bun.stdout || dest === Bun.stderr) {
-      return dest;
-    }
-
     if (!dest.exists()) {
       Bun.write(dest, '');
     }
@@ -131,9 +89,11 @@ export class Logestic {
    * @param dest - A custom logger function. Defaults to the console logger.
    * @returns A new Elysia instance.
    */
-  static preset(name: keyof Presets, dest: BunFile = Bun.stdout): Elysia {
-    const { uses, formatAttr } = presets[name];
-    return new Logestic(dest).use(uses).format(formatAttr);
+  static preset(
+    name: keyof Presets,
+    options: LogesticOptions = Logestic.defaultOptions
+  ): Elysia {
+    return presets[name](options);
   }
 
   /**
@@ -145,21 +105,23 @@ export class Logestic {
     return new Elysia()
       .onAfterHandle({ as: 'global' }, ctx => {
         let attrs = buildAttrs(ctx, this.requestedAttrs);
-        const msg = formatAttr.onSuccess(attrs);
+        let msg = formatAttr.onSuccess(attrs);
+        if (this.showType) {
+          msg = `${colourLogType('HTTP')} ${msg}`;
+        }
         this.log(msg);
       })
       .onError({ as: 'global' }, ({ request, error, code }) => {
         let datetime = new Date();
-        const msg = formatAttr.onFailure({ request, error, code, datetime });
+        let msg = formatAttr.onFailure({ request, error, code, datetime });
+        if (this.showType) {
+          msg = `${colourLogType('ERROR')} ${msg}`;
+        }
         this.log(msg);
       });
   }
 
-  /**
-   * Logs a message using the configured logger function.
-   * @param msg - The message to log.
-   */
-  async log(msg: string): Promise<void> {
+  private async log(msg: string): Promise<void> {
     let content: string | undefined = undefined;
     if (this.dest !== Bun.stdout) {
       content = await this.dest.text();
@@ -172,5 +134,53 @@ export class Logestic {
     writer.write(msg);
     writer.write('\n');
     writer.flush();
+  }
+
+  /**
+   * Logs a message to the destination.
+   * @param msg - The message to log.
+   */
+  info(msg: string): void {
+    let _msg = msg;
+    if (this.showType) {
+      _msg = `${colourLogType('INFO')} ${msg}`;
+    }
+    this.log(_msg);
+  }
+
+  /**
+   * Logs a warning message to the destination.
+   * @param msg - The message to log.
+   */
+  warn(msg: string): void {
+    let _msg = msg;
+    if (this.showType) {
+      _msg = `${colourLogType('WARN')} ${msg}`;
+    }
+    this.log(_msg);
+  }
+
+  /**
+   * Logs a debug message to the destination.
+   * @param msg - The message to log.
+   */
+  debug(msg: string): void {
+    let _msg = msg;
+    if (this.showType) {
+      _msg = `${colourLogType('DEBUG')} ${msg}`;
+    }
+    this.log(_msg);
+  }
+
+  /**
+   * Logs an error message to the destination.
+   * @param msg - The message to log.
+   */
+  error(msg: string): void {
+    let _msg = msg;
+    if (this.showType) {
+      _msg = `${colourLogType('ERROR')} ${msg}`;
+    }
+    this.log(_msg);
   }
 }

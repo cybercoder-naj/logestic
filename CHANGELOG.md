@@ -1,4 +1,13 @@
 # CHANGELOG
+## [0.5.0] - TODO
+### Added
+- Origin/level of the log message, 'HTTP', 'ERROR', 'WARN', 'DEBUG', 'INFO'.
+- `info`, `warn`, `debug`, `error` functions are added for custom logging throughout the application.
+
+### Changed
+- **BREAKING CHANGE**: `Logestic` accepts an options object instead of a destination file.
+- **BREAKING CHANGE**: `log` is a private function. Replace all usages of `log` function with `info` function.
+- Presets definition returns an `Elysia` instance.
 
 ## [0.4.0] - 21-03-2024
 ### Added

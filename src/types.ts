@@ -6,6 +6,9 @@
  * PresetValue and Presets define structures for preconfigured logging formats.
  */
 
+import { BunFile } from 'bun';
+import { Elysia } from 'elysia';
+
 /**
  * `Attribute` is a type representing possible attributes of a log entry.
  * Each attribute is optional and can be of various types.
@@ -39,25 +42,22 @@ export type AttributeMap = {
 };
 
 /**
- * `PresetValue` is a type representing a preset configuration for logging.
- *
- * @field uses: An array of keys from `Attribute` that are used in this preset.
- * @field format: A function that formats the log entry using the specified attributes.
- */
-export type PresetValue = {
-  uses: (keyof Attribute)[]; // An array of keys from `Attribute` that are used in this preset
-  formatAttr: FormatObj; // A function that formats the log entry
-};
-
-/**
  * `Presets` is a type representing a collection of preset configurations.
  * Each key is a preset name and the value is a `PresetValue`.
  */
 export type Presets = {
-  common: PresetValue; // A common preset configuration
+  common: (_: LogesticOptions) => Elysia; // A common preset configuration
+  fancy: (_: LogesticOptions) => Elysia;
 };
 
 export type FormatObj = {
   onSuccess: (attr: Attribute) => string;
   onFailure: (attr: ErrorAttribute) => string;
+};
+
+export type LogType = 'HTTP' | 'INFO' | 'WARN' | 'DEBUG' | 'ERROR';
+
+export type LogesticOptions = {
+  dest?: BunFile;
+  showLevel?: boolean;
 };
