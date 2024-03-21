@@ -1,9 +1,8 @@
-import { Elysia } from 'elysia';
 import { Logestic } from '..';
 import chalk from 'chalk';
 import { LogesticOptions } from '../types';
 
-export default (options: LogesticOptions): Elysia =>
+export default (options: LogesticOptions) =>
   new Logestic(options).use(['time', 'method', 'path', 'status']).format({
     onSuccess({ time, method, path, status }) {
       const grayTime = chalk.gray(`${time!!.toISOString()}`);

@@ -3,6 +3,7 @@
 ### Added
 - Customisable log type/level colour.
 - Option to disable implicit and explicit logging.
+- `build` function to create a logger wihout any `httpLogging`.
 
 ### Changed
 - Passing in options will override preset options.

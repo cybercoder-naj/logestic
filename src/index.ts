@@ -108,18 +108,19 @@ export class Logestic {
     return presets[name](options);
   }
 
+  build(this: Logestic) {
+    return new Elysia({
+      name: 'logestic'
+    }).decorate('logestic', this);
+  }
+
   /**
    * Configures a custom logging format and attaches it to the Elysia instance.
    * @param formatAttr - A function that takes an Attribute object and returns a string.
    * @returns A new Elysia instance.
    */
-  format(
-    formatAttr: FormatObj
-  ): Elysia<any, any, any, any, any, any, any, any> {
-    return new Elysia({
-      name: 'logestic'
-    })
-      .decorate('logestic', this)
+  format(this: Logestic, formatAttr: FormatObj) {
+    return this.build()
       .onAfterHandle({ as: 'global' }, ctx => {
         if (!this.httpLogging) {
           return;

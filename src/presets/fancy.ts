@@ -1,4 +1,3 @@
-import { Elysia } from 'elysia';
 import { Logestic } from '..';
 import chalk from 'chalk';
 import { LogesticOptions } from '../types';
@@ -13,7 +12,7 @@ const getDateTimeString = (date: Date) => {
   return `${day}/${month}/${year} ${hours}:${minutes}:${seconds}`;
 };
 
-export default (options: LogesticOptions): Elysia =>
+export default (options: LogesticOptions) =>
   new Logestic(options).use(['time', 'method', 'path']).format({
     onSuccess({ time, method, path }) {
       const dateTime = chalk.gray(getDateTimeString(time!!));
