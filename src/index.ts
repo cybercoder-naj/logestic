@@ -101,8 +101,11 @@ export class Logestic {
    * @param formatAttr - A function that takes an Attribute object and returns a string.
    * @returns A new Elysia instance.
    */
-  format(formatAttr: FormatObj): Elysia {
-    return new Elysia()
+  format(formatAttr: FormatObj): Elysia<'', false, any> {
+    return new Elysia({
+      name: 'logestic'
+    })
+      .decorate('logestic', this)
       .onAfterHandle({ as: 'global' }, ctx => {
         let attrs = buildAttrs(ctx, this.requestedAttrs);
         let msg = formatAttr.onSuccess(attrs);
