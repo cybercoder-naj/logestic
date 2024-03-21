@@ -66,6 +66,22 @@ export const colourLogType = (type: LogType): string => {
     case 'HTTP':
       bgColour = chalk.bgBlue;
       break;
+
+    case 'INFO':
+      bgColour = chalk.bgGreen;
+      break;
+
+    case 'WARN':
+      bgColour = chalk.bgYellow;
+      break;
+
+    case 'DEBUG':
+      bgColour = chalk.bgCyan;
+      break;
+
+    case 'ERROR':
+      bgColour = chalk.bgRed;
+      break;
   }
 
   const withSpaces = ` ${type} `;
