@@ -61,3 +61,5 @@ export type FormatObj = {
   onSuccess: (attr: Attribute) => string;
   onFailure: (attr: ErrorAttribute) => string;
 };
+
+export type LogType = 'HTTP' | 'INFO' | 'WARN' | 'DEBUG' | 'ERROR';

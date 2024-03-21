@@ -1,5 +1,6 @@
 import { type Context } from 'elysia';
-import type { AttributeMap, Attribute } from './types';
+import type { AttributeMap, Attribute, LogType } from './types';
+import chalk from 'chalk';
 
 /**
  * Builds an attribute object containing the requested attributes from the context.
@@ -57,4 +58,16 @@ export const buildAttrs = (ctx: Context, reqAttrs: AttributeMap): Attribute => {
   }
 
   return attrs;
+};
+
+export const colourLogType = (type: LogType): string => {
+  let bgColour: (_: string) => string = chalk.bgBlack;
+  switch (type) {
+    case 'HTTP':
+      bgColour = chalk.bgBlue;
+      break;
+  }
+
+  const withSpaces = ` ${type} `;
+  return bgColour?.(withSpaces) ?? withSpaces;
 };

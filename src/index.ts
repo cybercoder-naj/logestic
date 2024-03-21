@@ -8,40 +8,66 @@ import { Attribute, FormatObj, Presets } from './types';
 import presets from './presets';
 import { BunFile } from 'bun';
 import c from 'chalk';
-import { buildAttrs } from './utils';
+import { buildAttrs, colourLogType } from './utils';
 
 export type { Attribute };
 export const chalk = c; // Re-export chalk for custom formatting
+
+export type LogesticOptions = {
+  dest?: BunFile;
+  showType?: boolean;
+};
 
 /**
  * Logestic class provides methods to configure and perform logging.
  */
 export class Logestic {
+  private static defaultOptions: LogesticOptions = {
+    dest: Bun.stdout,
+    showType: false
+  };
+
   private requestedAttrs: {
     [key in keyof Attribute]: boolean;
   };
   private dest: BunFile;
+  private showType: boolean;
 
   /**
    * Constructs a new Logestic instance.
    * @param dest - Destination of the logs, Defaults to the console logger.
    */
-  constructor(dest: BunFile = Bun.stdout) {
+  constructor(options: LogesticOptions = Logestic.defaultOptions) {
     this.requestedAttrs = {};
+    this.showType = options.showType || false;
+
+    this.setDest(options.dest);
+  }
+
+  private setDest(dest?: BunFile): void {
+    if (!dest) {
+      // Default to stdout
+      this.dest = Bun.stdout;
+      return;
+    }
 
     if (dest === Bun.stdin) {
+      // Cannot log to stdin
       throw new Error(
         'Cannot log to stdin. Please provide a writable destination.'
       );
     }
+    if (dest === Bun.stdout || dest === Bun.stderr) {
+      // Use stdout or stderr
+      this.dest = dest;
+      return;
+    }
+
+    // Custom file destination
     this.dest = this.createFileIfNotExists(dest);
   }
 
   private createFileIfNotExists(dest: BunFile): BunFile {
-    if (dest === Bun.stdout || dest === Bun.stderr) {
-      return dest;
-    }
-
     if (!dest.exists()) {
       Bun.write(dest, '');
     }
@@ -74,9 +100,12 @@ export class Logestic {
    * @param dest - A custom logger function. Defaults to the console logger.
    * @returns A new Elysia instance.
    */
-  static preset(name: keyof Presets, dest: BunFile = Bun.stdout): Elysia {
+  static preset(
+    name: keyof Presets,
+    options: LogesticOptions = Logestic.defaultOptions
+  ): Elysia {
     const { uses, formatAttr } = presets[name];
-    return new Logestic(dest).use(uses).format(formatAttr);
+    return new Logestic(options).use(uses).format(formatAttr);
   }
 
   /**
@@ -88,12 +117,18 @@ export class Logestic {
     return new Elysia()
       .onAfterHandle({ as: 'global' }, ctx => {
         let attrs = buildAttrs(ctx, this.requestedAttrs);
-        const msg = formatAttr.onSuccess(attrs);
+        let msg = formatAttr.onSuccess(attrs);
+        if (this.showType) {
+          msg = `${colourLogType('HTTP')} ${msg}`;
+        }
         this.log(msg);
       })
       .onError({ as: 'global' }, ({ request, error, code }) => {
         let datetime = new Date();
-        const msg = formatAttr.onFailure({ request, error, code, datetime });
+        let msg = formatAttr.onFailure({ request, error, code, datetime });
+        if (this.showType) {
+          msg = `${colourLogType('ERROR')} ${msg}`;
+        }
         this.log(msg);
       });
   }
