@@ -42,8 +42,6 @@ const app = new Elysia()
   .listen(5566);
 ```
 
-#### Output:
-
 ![Custom Preset](./screenshots/custom-preset.png)
 
 ### Custom request logging

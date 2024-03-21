@@ -6,7 +6,7 @@ import { LogesticOptions } from '../types';
 export default (options: LogesticOptions): Elysia =>
   new Logestic({
     ...options,
-    showType: false
+    showLevel: false
   })
     .use(['time', 'method', 'path', 'status'])
     .format({

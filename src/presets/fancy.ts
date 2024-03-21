@@ -16,7 +16,7 @@ const getDateTimeString = (date: Date) => {
 export default (options: LogesticOptions): Elysia =>
   new Logestic({
     ...options,
-    showType: true
+    showLevel: true
   })
     .use(['time', 'method', 'path'])
     .format({

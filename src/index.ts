@@ -19,7 +19,7 @@ export const chalk = c; // Re-export chalk for custom formatting
 export class Logestic {
   private static defaultOptions: LogesticOptions = {
     dest: Bun.stdout,
-    showType: false
+    showLevel: false
   };
 
   private requestedAttrs: {
@@ -34,7 +34,7 @@ export class Logestic {
    */
   constructor(options: LogesticOptions = Logestic.defaultOptions) {
     this.requestedAttrs = {};
-    this.showType = options.showType || false;
+    this.showType = options.showLevel || false;
 
     this.setDest(options.dest || Bun.stdout);
   }

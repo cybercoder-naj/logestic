@@ -59,5 +59,5 @@ export type LogType = 'HTTP' | 'INFO' | 'WARN' | 'DEBUG' | 'ERROR';
 
 export type LogesticOptions = {
   dest?: BunFile;
-  showType?: boolean;
+  showLevel?: boolean;
 };
