@@ -2,7 +2,7 @@
 
 ## Reporting Issues
 
-😥 Feel free to submit an issue when Logestic is not working as you expect.
+😥 Feel free to submit an issue when Logestic is not working as you expected.
 
 ## Solving Issues
 
