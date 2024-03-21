@@ -1,5 +1,5 @@
 # CHANGELOG
-## [1.0.0-alpha.1] - 21-03-2024
+## [1.0.0-alpha.2] - 21-03-2024
 ### Added
 - Customisable log type/level colour.
 - Option to disable implicit and explicit logging.
@@ -8,6 +8,9 @@
 ### Changed
 - Passing in options will override preset options.
 - Type loss when using Logestic middleware.
+
+## [1.0.0-alpha.1] - 21-03-2024
+*Redacted. see 1.0.0-alpha.2 for changes*
 
 ## [0.5.0] - 21-03-2024
 ### Added
