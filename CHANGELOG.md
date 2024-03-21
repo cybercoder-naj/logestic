@@ -2,6 +2,7 @@
 ## [1.0.0-alpha.1] - 21-03-2024
 ### Added
 - Customisable log type/level colour.
+- Option to disable implicit and explicit logging.
 
 ### Changed
 - Passing in options will override preset options.
