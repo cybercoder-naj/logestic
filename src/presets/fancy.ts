@@ -8,16 +8,22 @@ const getDateTimeString = (date: Date) => {
   const hours = date.getHours();
   const minutes = date.getMinutes();
   const seconds = date.getSeconds();
-  return chalk.gray(`${day}/${month}/${year} ${hours}:${minutes}:${seconds}`);
+  return `${day}/${month}/${year} ${hours}:${minutes}:${seconds}`;
 };
 
 const preset: PresetValue = {
   uses: ['time', 'method', 'path'],
-  formatAttr: ({ time, method, path }) => {
-    const dateTime = getDateTimeString(time!!);
-    const methodPath = chalk.cyan(`${method} ${path}`);
+  formatAttr: {
+    onSuccess({ time, method, path }) {
+      const dateTime = chalk.gray(getDateTimeString(time!!));
+      const methodPath = chalk.cyan(`${method} ${path}`);
 
-    return `${dateTime} ${methodPath}`;
+      return `${dateTime} ${methodPath}`;
+    },
+    onFailure({ request, datetime }) {
+      const dateTime = getDateTimeString(datetime!!);
+      return chalk.red(`${dateTime} ${request.method} ${request.url}`);
+    }
   }
 };
 

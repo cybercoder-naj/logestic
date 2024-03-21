@@ -23,6 +23,13 @@ export type Attribute = {
   userAgent?: string; // The user agent string of the client making the request
 };
 
+export type ErrorAttribute = {
+  request: Request;
+  error: Error;
+  code: any; // either string description or number
+  datetime: Date;
+};
+
 /**
  * `AttributeMap` is a type that maps each key of `Attribute` to a boolean.
  * It is used to indicate which attributes are enabled or disabled.
@@ -39,7 +46,7 @@ export type AttributeMap = {
  */
 export type PresetValue = {
   uses: (keyof Attribute)[]; // An array of keys from `Attribute` that are used in this preset
-  formatAttr: (attr: Attribute) => string; // A function that formats the log entry
+  formatAttr: FormatObj; // A function that formats the log entry
 };
 
 /**
@@ -48,4 +55,9 @@ export type PresetValue = {
  */
 export type Presets = {
   common: PresetValue; // A common preset configuration
+};
+
+export type FormatObj = {
+  onSuccess: (attr: Attribute) => string;
+  onFailure: (attr: ErrorAttribute) => string;
 };

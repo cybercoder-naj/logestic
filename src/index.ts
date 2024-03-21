@@ -3,8 +3,8 @@
  *   It allows for customizable logging of HTTP requests and responses.
  */
 
-import Elysia, { Context } from 'elysia';
-import { Attribute, AttributeMap, Presets } from './types';
+import Elysia, { type Context } from 'elysia';
+import { Attribute, AttributeMap, FormatObj, Presets } from './types';
 import presets from './presets';
 import { BunFile } from 'bun';
 import c from 'chalk';
@@ -141,15 +141,17 @@ export class Logestic {
    * @param formatAttr - A function that takes an Attribute object and returns a string.
    * @returns A new Elysia instance.
    */
-  format(formatAttr: (attr: Attribute) => string): Elysia {
+  format(formatAttr: FormatObj): Elysia {
     return new Elysia()
       .onAfterHandle({ as: 'global' }, ctx => {
         let attrs = buildAttrs(ctx, this.requestedAttrs);
-        const msg = formatAttr(attrs);
+        const msg = formatAttr.onSuccess(attrs);
         this.log(msg);
       })
-      .onError({ as: 'global' }, ({ request, error }) => {
-        this.log(`Error: ${request.method} ${request.url} ${error.message}`);
+      .onError({ as: 'global' }, ({ request, error, code }) => {
+        let datetime = new Date();
+        const msg = formatAttr.onFailure({ request, error, code, datetime });
+        this.log(msg);
       });
   }
 
