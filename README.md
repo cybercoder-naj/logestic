@@ -9,6 +9,7 @@ An advanced and customisable logging library for [ElysiaJS](https://elysiajs.com
 - [Logestic](#logestic)
 - [Table of Contents](#table-of-contents)
 - [Installation](#installation)
+- [Configuration](#configuration)
 - [Usage](#usage)
   - [Preset logging](#preset-request-logging)
   - [Custom logging](#custom-request-logging)
@@ -38,6 +39,7 @@ import { Logestic } from 'logestic';
 const app = new Elysia()
   .use(Logestic.preset('common'))
   .get('/', () => "Hello from server")
+  /* ... */
   .listen(3000, () => {
     console.log("Server is running on port 3000")
   });
@@ -55,25 +57,11 @@ If you don't like any of presets, you can configure Logestic to log your request
 
 ```typescript
 // ./logger.ts
-import { Logestic, LogesticOptions, chalk } from 'logestic';
-
-// These are the default options. You do not have to pass this.
-const options: LogesticOptions = {
-  dest: Bun.stdout,
-  showLevel: true,
-  logLevelColour: {
-    http: undefined,
-    info: undefined,
-    debug: undefined,
-    warn: undefined,
-    error: undefined
-  }
-  httpLogging: true,
-  explicitLogging: true
-}
+import { Logestic, chalk } from 'logestic';
 
 // exports an Elysia instance
-export default new Logestic(options).use(['method', 'path', 'time', 'status'])
+export default new Logestic()
+  .use(['method', 'path', 'time', 'status'])
   .format({
     onSuccess({ method, path, time, status }) {
       return `[${time}]: ${method} ${path} | ${status}`
@@ -89,10 +77,23 @@ import myLogger from './logger';
 const app = new Elysia()
   .use(myLogger)
   .get('/', () => "Hello from server")
-  .listen(5566);
+  /* ... */
+  .listen(3000, () => {
+    console.log("Server is running on port 3000")
+  });
 ```
 
 Consider contributing your own preset; check [contributing guidelines](#contributing-guidelines).
+
+## Configuration
+
+| Name | Type | Description | Default |
+| :--: | :--: | :-------- | :----- |
+| dest | `BunFile` | The destination file for logging. | `Bun.stdout` |
+| showLevel | `boolean` | Whether to show the log level. | `false` |
+| logLevelColour | `LogLevelColour` | The colour of each log level. | `{ [key in LogType]: undefined }` |
+| httpLogging | `boolean` | Log successful http requests | `true` |
+| explicitLogging | `boolean` | Allow logging for explicit calls | `true` |
 
 ## Contributing Guidelines
 
