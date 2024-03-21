@@ -59,8 +59,9 @@ If you don't like any of presets, you can configure Logestic to log your request
 import { Logestic, chalk } from 'logestic';
 
 // exports an Elysia instance
-export default new Logestic(Bun.file('request.log'))
-  .use(['method', 'path', 'time', 'status'])
+export default new Logestic({
+  dest: Bun.file('request.log')
+}).use(['method', 'path', 'time', 'status'])
   .format({
     onSuccess({ method, path, time, status }) {
       return `[${time}]: ${method} ${path} | ${status}`
