@@ -10,7 +10,7 @@ import { BunFile } from 'bun';
 import c from 'chalk';
 import { buildAttrs, colourLogType } from './utils';
 
-export type { Attribute };
+export type { Attribute, LogesticOptions };
 export const chalk = c; // Re-export chalk for custom formatting
 
 /**
@@ -101,7 +101,9 @@ export class Logestic {
    * @param formatAttr - A function that takes an Attribute object and returns a string.
    * @returns A new Elysia instance.
    */
-  format(formatAttr: FormatObj): Elysia<'', false, any> {
+  format(
+    formatAttr: FormatObj
+  ): Elysia<any, any, any, any, any, any, any, any> {
     return new Elysia({
       name: 'logestic'
     })

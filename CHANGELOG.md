@@ -1,4 +1,8 @@
 # CHANGELOG
+## [1.0.0-alpha.1] - 21-03-2024
+### Added
+
+
 ## [0.5.0] - 21-03-2024
 ### Added
 - Origin/level of the log message, 'HTTP', 'ERROR', 'WARN', 'DEBUG', 'INFO'.
