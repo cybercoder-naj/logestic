@@ -121,11 +121,7 @@ export class Logestic {
       });
   }
 
-  /**
-   * Logs a message using the configured logger function.
-   * @param msg - The message to log.
-   */
-  async log(msg: string): Promise<void> {
+  private async log(msg: string): Promise<void> {
     let content: string | undefined = undefined;
     if (this.dest !== Bun.stdout) {
       content = await this.dest.text();
@@ -138,5 +134,17 @@ export class Logestic {
     writer.write(msg);
     writer.write('\n');
     writer.flush();
+  }
+
+  /**
+   * Logs a message to the destination.
+   * @param msg - The message to log.
+   */
+  async info(msg: string): Promise<void> {
+    let _msg = msg;
+    if (this.showType) {
+      _msg = `${colourLogType('INFO')} ${msg}`;
+    }
+    this.log(_msg);
   }
 }
