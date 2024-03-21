@@ -13,11 +13,16 @@ const getDateTimeString = (date: Date) => {
 
 const preset: PresetValue = {
   uses: ['time', 'method', 'path'],
-  formatAttr: ({ time, method, path }) => {
-    const dateTime = getDateTimeString(time!!);
-    const methodPath = chalk.cyan(`${method} ${path}`);
+  formatAttr: {
+    onSuccess({ time, method, path }) {
+      const dateTime = getDateTimeString(time!!);
+      const methodPath = chalk.cyan(`${method} ${path}`);
 
-    return `${dateTime} ${methodPath}`;
+      return `${dateTime} ${methodPath}`;
+    },
+    onFailure() {
+      return '';
+    }
   }
 };
 
