@@ -26,7 +26,7 @@ const buildAttrs = (ctx: Context, reqAttrs: AttributeMap): Attribute => {
     const k = key as keyof Attribute;
     switch (k) {
       case 'ip':
-        attrs.ip = ctx.request.headers.get('x-forwarded-for') || '<ip?>';
+        attrs.ip = request.headers.get('x-forwarded-for') || '<ip?>';
         break;
 
       case 'method':
