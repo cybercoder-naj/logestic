@@ -30,7 +30,7 @@ export class Logestic {
   private requestedAttrs: {
     [key in keyof Attribute]: boolean;
   };
-  private dest: BunFile;
+  private dest!: BunFile;
   private showType: boolean;
 
   /**
@@ -41,16 +41,10 @@ export class Logestic {
     this.requestedAttrs = {};
     this.showType = options.showType || false;
 
-    this.setDest(options.dest);
+    this.setDest(options.dest || Bun.stdout);
   }
 
-  private setDest(dest?: BunFile): void {
-    if (!dest) {
-      // Default to stdout
-      this.dest = Bun.stdout;
-      return;
-    }
-
+  private setDest(dest: BunFile): void {
     if (dest === Bun.stdin) {
       // Cannot log to stdin
       throw new Error(
