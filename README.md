@@ -10,15 +10,14 @@ An advanced and customisable logging library for [ElysiaJS](https://elysiajs.com
 - [Table of Contents](#table-of-contents)
 - [Installation](#installation)
 - [Usage](#usage)
-  - [Preset request logging](#preset-request-logging)
-  - [Custom request logging](#custom-request-logging)
+  - [Preset logging](#preset-request-logging)
+  - [Custom logging](#custom-request-logging)
 - [Contributing Guidelines](#contributing-guidelines)
 - [License](#license)
-- [Authors](#authors)
 
 ## Installation
 
-Add the package to your Elysia Project. 
+Add the package to your Elysia Project via [bun](https://bun.sh). 
 ```bash
   bun add logestic
 ```
@@ -39,7 +38,9 @@ import { Logestic } from 'logestic';
 const app = new Elysia()
   .use(Logestic.preset('common'))
   .get('/', () => "Hello from server")
-  .listen(5566);
+  .listen(3000, () => {
+    console.log("Server is running on port 3000")
+  });
 ```
 
 ![Custom Preset](./screenshots/custom-preset.png)
@@ -54,12 +55,25 @@ If you don't like any of presets, you can configure Logestic to log your request
 
 ```typescript
 // ./logger.ts
-import { Logestic, chalk } from 'logestic';
+import { Logestic, LogesticOptions, chalk } from 'logestic';
+
+// These are the default options. You do not have to pass this.
+const options: LogesticOptions = {
+  dest: Bun.stdout,
+  showLevel: true,
+  logLevelColour: {
+    http: undefined,
+    info: undefined,
+    debug: undefined,
+    warn: undefined,
+    error: undefined
+  }
+  httpLogging: true,
+  explicitLogging: true
+}
 
 // exports an Elysia instance
-export default new Logestic({
-  dest: Bun.file('request.log')
-}).use(['method', 'path', 'time', 'status'])
+export default new Logestic(options).use(['method', 'path', 'time', 'status'])
   .format({
     onSuccess({ method, path, time, status }) {
       return `[${time}]: ${method} ${path} | ${status}`
@@ -87,7 +101,3 @@ See [CONTRIBUTING.md](./CONTRIBUTING.md)
 ## License
 
 [MIT](./LICENSE)
-
-## Authors
-
-- [@cybercoder-naj](https://github.com/cybercoder-naj)

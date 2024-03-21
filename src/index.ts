@@ -23,11 +23,6 @@ export const chalk = c; // Re-export chalk for custom formatting
  * Logestic class provides methods to configure and perform logging.
  */
 export class Logestic {
-  private static defaultOptions: LogesticOptions = {
-    dest: Bun.stdout,
-    showLevel: false
-  };
-
   private requestedAttrs: {
     [key in keyof Attribute]: boolean;
   };
@@ -41,7 +36,7 @@ export class Logestic {
    * Constructs a new Logestic instance.
    * @param dest - Destination of the logs, Defaults to the console logger.
    */
-  constructor(options: LogesticOptions = Logestic.defaultOptions) {
+  constructor(options: LogesticOptions = {}) {
     this.requestedAttrs = {};
     this.showLevel = options.showLevel || false;
     this.logLevelColour = options.logLevelColour || {};
@@ -85,14 +80,18 @@ export class Logestic {
   use(attrs: keyof Attribute | (keyof Attribute)[]): Logestic {
     if (Array.isArray(attrs)) {
       for (const attr of attrs) {
-        this.requestedAttrs[attr] = true;
+        this._use(attr);
       }
       return this;
     }
 
     // Single attribute
-    this.requestedAttrs[attrs] = true;
+    this._use(attrs);
     return this;
+  }
+
+  private _use(attr: keyof Attribute) {
+    this.requestedAttrs[attr] = true;
   }
 
   /**
@@ -101,10 +100,7 @@ export class Logestic {
    * @param dest - A custom logger function. Defaults to the console logger.
    * @returns A new Elysia instance.
    */
-  static preset(
-    name: keyof Presets,
-    options: LogesticOptions = Logestic.defaultOptions
-  ): Elysia {
+  static preset(name: keyof Presets, options: LogesticOptions = {}): Elysia {
     return presets[name](options);
   }
 

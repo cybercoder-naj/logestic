@@ -7,6 +7,7 @@
 
 ### Changed
 - Passing in options will override preset options.
+- Type loss when using Logestic middleware.
 
 ## [0.5.0] - 21-03-2024
 ### Added
