@@ -64,4 +64,6 @@ export type LogesticOptions = {
   dest?: BunFile;
   showLevel?: boolean;
   logLevelColour?: LogLevelColour;
+  httpLogging?: boolean;
+  explicitLogging?: boolean;
 };

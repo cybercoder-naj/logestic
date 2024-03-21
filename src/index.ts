@@ -34,6 +34,8 @@ export class Logestic {
   private dest!: BunFile;
   private showLevel: boolean;
   private logLevelColour: LogLevelColour;
+  private httpLogging: boolean;
+  private explicitLogging: boolean;
 
   /**
    * Constructs a new Logestic instance.
@@ -43,6 +45,8 @@ export class Logestic {
     this.requestedAttrs = {};
     this.showLevel = options.showLevel || false;
     this.logLevelColour = options.logLevelColour || {};
+    this.httpLogging = options.httpLogging || true;
+    this.explicitLogging = options.explicitLogging || true;
 
     this.setDest(options.dest || Bun.stdout);
   }
@@ -117,6 +121,10 @@ export class Logestic {
     })
       .decorate('logestic', this)
       .onAfterHandle({ as: 'global' }, ctx => {
+        if (!this.httpLogging) {
+          return;
+        }
+
         let attrs = buildAttrs(ctx, this.requestedAttrs);
         let msg = formatAttr.onSuccess(attrs);
         if (this.showLevel) {
@@ -154,6 +162,10 @@ export class Logestic {
    * @param msg - The message to log.
    */
   info(msg: string): void {
+    if (!this.explicitLogging) {
+      return;
+    }
+
     let _msg = msg;
     if (this.showLevel) {
       _msg = `${colourLogType('info', this.logLevelColour)} ${msg}`;
@@ -166,6 +178,10 @@ export class Logestic {
    * @param msg - The message to log.
    */
   warn(msg: string): void {
+    if (!this.explicitLogging) {
+      return;
+    }
+
     let _msg = msg;
     if (this.showLevel) {
       _msg = `${colourLogType('warn', this.logLevelColour)} ${msg}`;
@@ -178,6 +194,10 @@ export class Logestic {
    * @param msg - The message to log.
    */
   debug(msg: string): void {
+    if (!this.explicitLogging) {
+      return;
+    }
+
     let _msg = msg;
     if (this.showLevel) {
       _msg = `${colourLogType('debug', this.logLevelColour)} ${msg}`;
@@ -190,6 +210,10 @@ export class Logestic {
    * @param msg - The message to log.
    */
   error(msg: string): void {
+    if (!this.explicitLogging) {
+      return;
+    }
+
     let _msg = msg;
     if (this.showLevel) {
       _msg = `${colourLogType('error', this.logLevelColour)} ${msg}`;
