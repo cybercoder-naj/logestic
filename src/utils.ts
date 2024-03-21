@@ -1,6 +1,6 @@
 import { type Context } from 'elysia';
-import type { AttributeMap, Attribute, LogType } from './types';
-import chalk from 'chalk';
+import type { AttributeMap, Attribute, LogType, LogLevelColour } from './types';
+import chalk, { ChalkInstance } from 'chalk';
 
 /**
  * Builds an attribute object containing the requested attributes from the context.
@@ -60,30 +60,38 @@ export const buildAttrs = (ctx: Context, reqAttrs: AttributeMap): Attribute => {
   return attrs;
 };
 
-export const colourLogType = (type: LogType): string => {
-  let bgColour: (_: string) => string = chalk.bgBlack;
+export const colourLogType = (
+  type: LogType,
+  colourDef: LogLevelColour
+): string => {
+  let bgColour: ChalkInstance = chalk.bgBlack;
   switch (type) {
-    case 'HTTP':
-      bgColour = chalk.bgBlue;
+    case 'http':
+      bgColour =
+        (colourDef[type] && chalk.hex(colourDef[type]!!)) || chalk.bgBlue;
       break;
 
-    case 'INFO':
-      bgColour = chalk.bgGreen;
+    case 'info':
+      bgColour =
+        (colourDef[type] && chalk.hex(colourDef[type]!!)) || chalk.bgGreen;
       break;
 
-    case 'WARN':
-      bgColour = chalk.bgYellow;
+    case 'warn':
+      bgColour =
+        (colourDef[type] && chalk.hex(colourDef[type]!!)) || chalk.bgYellow;
       break;
 
-    case 'DEBUG':
-      bgColour = chalk.bgCyan;
+    case 'debug':
+      bgColour =
+        (colourDef[type] && chalk.hex(colourDef[type]!!)) || chalk.bgCyan;
       break;
 
-    case 'ERROR':
-      bgColour = chalk.bgRed;
+    case 'error':
+      bgColour =
+        (colourDef[type] && chalk.hex(colourDef[type]!!)) || chalk.bgRed;
       break;
   }
 
-  const withSpaces = ` ${type} `;
+  const withSpaces = ` ${type.toUpperCase()} `;
   return bgColour?.(withSpaces) ?? withSpaces;
 };

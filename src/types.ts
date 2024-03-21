@@ -55,9 +55,13 @@ export type FormatObj = {
   onFailure: (attr: ErrorAttribute) => string;
 };
 
-export type LogType = 'HTTP' | 'INFO' | 'WARN' | 'DEBUG' | 'ERROR';
+export type LogType = 'http' | 'info' | 'warn' | 'debug' | 'error';
+export type LogLevelColour = {
+  [key in LogType]?: string;
+};
 
 export type LogesticOptions = {
   dest?: BunFile;
   showLevel?: boolean;
+  logLevelColour?: LogLevelColour;
 };

@@ -1,7 +1,10 @@
 # CHANGELOG
 ## [1.0.0-alpha.1] - 21-03-2024
 ### Added
+- Customisable log type/level colour.
 
+### Changed
+- Passing in options will override preset options.
 
 ## [0.5.0] - 21-03-2024
 ### Added

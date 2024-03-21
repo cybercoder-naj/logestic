@@ -4,7 +4,13 @@
  */
 
 import Elysia from 'elysia';
-import { Attribute, FormatObj, LogesticOptions, Presets } from './types';
+import {
+  Attribute,
+  FormatObj,
+  LogLevelColour,
+  LogesticOptions,
+  Presets
+} from './types';
 import presets from './presets';
 import { BunFile } from 'bun';
 import c from 'chalk';
@@ -27,6 +33,7 @@ export class Logestic {
   };
   private dest!: BunFile;
   private showLevel: boolean;
+  private logLevelColour: LogLevelColour;
 
   /**
    * Constructs a new Logestic instance.
@@ -35,6 +42,7 @@ export class Logestic {
   constructor(options: LogesticOptions = Logestic.defaultOptions) {
     this.requestedAttrs = {};
     this.showLevel = options.showLevel || false;
+    this.logLevelColour = options.logLevelColour || {};
 
     this.setDest(options.dest || Bun.stdout);
   }
@@ -112,7 +120,7 @@ export class Logestic {
         let attrs = buildAttrs(ctx, this.requestedAttrs);
         let msg = formatAttr.onSuccess(attrs);
         if (this.showLevel) {
-          msg = `${colourLogType('HTTP')} ${msg}`;
+          msg = `${colourLogType('http', this.logLevelColour)} ${msg}`;
         }
         this.log(msg);
       })
@@ -120,7 +128,7 @@ export class Logestic {
         let datetime = new Date();
         let msg = formatAttr.onFailure({ request, error, code, datetime });
         if (this.showLevel) {
-          msg = `${colourLogType('ERROR')} ${msg}`;
+          msg = `${colourLogType('error', this.logLevelColour)} ${msg}`;
         }
         this.log(msg);
       });
@@ -148,7 +156,7 @@ export class Logestic {
   info(msg: string): void {
     let _msg = msg;
     if (this.showLevel) {
-      _msg = `${colourLogType('INFO')} ${msg}`;
+      _msg = `${colourLogType('info', this.logLevelColour)} ${msg}`;
     }
     this.log(_msg);
   }
@@ -160,7 +168,7 @@ export class Logestic {
   warn(msg: string): void {
     let _msg = msg;
     if (this.showLevel) {
-      _msg = `${colourLogType('WARN')} ${msg}`;
+      _msg = `${colourLogType('warn', this.logLevelColour)} ${msg}`;
     }
     this.log(_msg);
   }
@@ -172,7 +180,7 @@ export class Logestic {
   debug(msg: string): void {
     let _msg = msg;
     if (this.showLevel) {
-      _msg = `${colourLogType('DEBUG')} ${msg}`;
+      _msg = `${colourLogType('debug', this.logLevelColour)} ${msg}`;
     }
     this.log(_msg);
   }
@@ -184,7 +192,7 @@ export class Logestic {
   error(msg: string): void {
     let _msg = msg;
     if (this.showLevel) {
-      _msg = `${colourLogType('ERROR')} ${msg}`;
+      _msg = `${colourLogType('error', this.logLevelColour)} ${msg}`;
     }
     this.log(_msg);
   }

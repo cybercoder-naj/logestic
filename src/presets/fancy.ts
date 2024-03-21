@@ -14,20 +14,15 @@ const getDateTimeString = (date: Date) => {
 };
 
 export default (options: LogesticOptions): Elysia =>
-  new Logestic({
-    ...options,
-    showLevel: true
-  })
-    .use(['time', 'method', 'path'])
-    .format({
-      onSuccess({ time, method, path }) {
-        const dateTime = chalk.gray(getDateTimeString(time!!));
-        const methodPath = chalk.cyan(`${method} ${path}`);
+  new Logestic(options).use(['time', 'method', 'path']).format({
+    onSuccess({ time, method, path }) {
+      const dateTime = chalk.gray(getDateTimeString(time!!));
+      const methodPath = chalk.cyan(`${method} ${path}`);
 
-        return `${dateTime} ${methodPath}`;
-      },
-      onFailure({ request, datetime }) {
-        const dateTime = getDateTimeString(datetime!!);
-        return chalk.red(`${dateTime} ${request.method} ${request.url}`);
-      }
-    });
+      return `${dateTime} ${methodPath}`;
+    },
+    onFailure({ request, datetime }) {
+      const dateTime = getDateTimeString(datetime!!);
+      return chalk.red(`${dateTime} ${request.method} ${request.url}`);
+    }
+  });
