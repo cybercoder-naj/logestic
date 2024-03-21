@@ -9,12 +9,12 @@ import {
   FormatObj,
   LogLevelColour,
   LogesticOptions,
-  Presets
+  Preset
 } from './types';
-import presets from './presets';
 import { BunFile } from 'bun';
 import c from 'chalk';
 import { buildAttrs, colourLogType } from './utils';
+import { getPreset } from './presets';
 
 export type { Attribute, LogesticOptions };
 export const chalk = c; // Re-export chalk for custom formatting
@@ -101,8 +101,8 @@ export class Logestic {
    * @param options The options to configure the preset. Any options provided will override the preset's default options.
    * @returns A new Elysia instance with the logger plugged in.
    */
-  static preset(name: keyof Presets, options: LogesticOptions = {}): Elysia {
-    return presets[name](options);
+  static preset(name: Preset, options: LogesticOptions = {}) {
+    return getPreset(name)(options);
   }
 
   /**
@@ -117,6 +117,8 @@ export class Logestic {
   }
 
   /**
+   * Successful requests will not log if httpLogging is disabled.
+   * Error logs will always be logged regardless.
    *
    * @param formatAttr - The format object containing functions to format successful and failed logs.
    * @returns Elysia instance with the logger plugged in.
@@ -128,6 +130,7 @@ export class Logestic {
           return;
         }
 
+        // get attributes, format and log
         let attrs = buildAttrs(ctx, this.requestedAttrs);
         let msg = formatAttr.onSuccess(attrs);
         if (this.showLevel) {
@@ -147,10 +150,13 @@ export class Logestic {
 
   private async log(msg: string): Promise<void> {
     let content: string | undefined = undefined;
+    // Get the content of the file if it is not stdout
+    // Possible race condition in the file for multiple requests
     if (this.dest !== Bun.stdout) {
       content = await this.dest.text();
     }
 
+    // Append the log message
     const writer = this.dest.writer();
     if (content) {
       writer.write(content);

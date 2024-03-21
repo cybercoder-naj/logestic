@@ -76,6 +76,7 @@ export const colourLogType = (
   colourDef: LogLevelColour
 ): string => {
   let bgColour: ChalkInstance = chalk.bgBlack;
+  // If the log type is not in the colour definition, use the default colour
   switch (type) {
     case 'http':
       bgColour =

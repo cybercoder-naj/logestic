@@ -1,10 +1,12 @@
-import { Presets } from '../types';
+import { Preset } from '../types';
 import common from './common';
 import fancy from './fancy';
 
-const presets: Presets = {
-  common,
-  fancy
+export const getPreset = (preset: Preset) => {
+  switch (preset) {
+    case 'common':
+      return common;
+    case 'fancy':
+      return fancy;
+  }
 };
-
-export default presets;

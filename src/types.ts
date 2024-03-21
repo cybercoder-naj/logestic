@@ -6,7 +6,6 @@
  */
 
 import { BunFile } from 'bun';
-import { Elysia } from 'elysia';
 
 export type Attribute = {
   ip?: string;
@@ -39,11 +38,7 @@ export type AttributeMap = {
 /**
  * `Presets` is an object that contains preset configurations for the Logestic module.
  */
-export type Presets = {
-  common: (_: LogesticOptions) => Elysia; // A common preset configuration
-  fancy: (_: LogesticOptions) => Elysia;
-};
-
+export type Preset = 'common' | 'fancy';
 /**
  * `FormatObj` is an object that contains functions to format successful and failed logs.
  */
