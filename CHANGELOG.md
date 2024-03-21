@@ -1,5 +1,5 @@
 # CHANGELOG
-## [0.5.0] - TODO
+## [0.5.0] - 21-03-2024
 ### Added
 - Origin/level of the log message, 'HTTP', 'ERROR', 'WARN', 'DEBUG', 'INFO'.
 - `info`, `warn`, `debug`, `error` functions are added for custom logging throughout the application.
