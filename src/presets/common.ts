@@ -18,7 +18,7 @@ export default (options: LogesticOptions) =>
     onFailure({ request, error, code, datetime }) {
       const grayTime = chalk.gray(`${datetime.toISOString()}`);
       const msg = chalk.red(
-        `Error: ${request.method} ${request.url} ${error.message} ${code}`
+        `${request.method} ${request.url} ${error.message} ${code}`
       );
       return `[${grayTime}] ${msg}`;
     }

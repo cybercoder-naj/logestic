@@ -1,6 +1,6 @@
 /**
- * @fileoverview This module provides a logging utility for Elysia, a Node.js framework.
- *   It allows for customizable logging of HTTP requests and responses.
+ * @module logestic
+ * @description This module provides a class to configure and perform logging.
  */
 
 import Elysia from 'elysia';
@@ -33,8 +33,10 @@ export class Logestic {
   private explicitLogging: boolean;
 
   /**
-   * Constructs a new Logestic instance.
-   * @param dest - Destination of the logs, Defaults to the console logger.
+   * Creates a new Logestic instance.
+   *
+   * @param options - The options to configure the Logestic instance.
+   * @see LogesticOptions
    */
   constructor(options: LogesticOptions = {}) {
     this.requestedAttrs = {};
@@ -95,15 +97,19 @@ export class Logestic {
   }
 
   /**
-   * Creates a new Elysia instance with a preset logging configuration.
-   * @param name - The name of the preset to use.
-   * @param dest - A custom logger function. Defaults to the console logger.
-   * @returns A new Elysia instance.
+   * @param name The name of the preset to use.
+   * @param options The options to configure the preset. Any options provided will override the preset's default options.
+   * @returns A new Elysia instance with the logger plugged in.
    */
   static preset(name: keyof Presets, options: LogesticOptions = {}): Elysia {
     return presets[name](options);
   }
 
+  /**
+   * Use this when you do not want any http logging.
+   *
+   * @returns Elysia instance with the logger plugged in.
+   */
   build(this: Logestic) {
     return new Elysia({
       name: 'logestic'
@@ -111,9 +117,9 @@ export class Logestic {
   }
 
   /**
-   * Configures a custom logging format and attaches it to the Elysia instance.
-   * @param formatAttr - A function that takes an Attribute object and returns a string.
-   * @returns A new Elysia instance.
+   *
+   * @param formatAttr - The format object containing functions to format successful and failed logs.
+   * @returns Elysia instance with the logger plugged in.
    */
   format(this: Logestic, formatAttr: FormatObj) {
     return this.build()
@@ -155,8 +161,9 @@ export class Logestic {
   }
 
   /**
-   * Logs a message to the destination.
-   * @param msg - The message to log.
+   * Logs an info message to the destination.
+   *
+   * @param msg The message to log.
    */
   info(msg: string): void {
     if (!this.explicitLogging) {
@@ -172,7 +179,8 @@ export class Logestic {
 
   /**
    * Logs a warning message to the destination.
-   * @param msg - The message to log.
+   *
+   * @param msg The message to log.
    */
   warn(msg: string): void {
     if (!this.explicitLogging) {
@@ -188,7 +196,8 @@ export class Logestic {
 
   /**
    * Logs a debug message to the destination.
-   * @param msg - The message to log.
+   *
+   * @param msg The message to log.
    */
   debug(msg: string): void {
     if (!this.explicitLogging) {
@@ -204,7 +213,8 @@ export class Logestic {
 
   /**
    * Logs an error message to the destination.
-   * @param msg - The message to log.
+   *
+   * @param msg The message to log.
    */
   error(msg: string): void {
     if (!this.explicitLogging) {

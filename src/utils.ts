@@ -1,12 +1,18 @@
+/**
+ * @module utils
+ * @description This module provides utility functions for logging.
+ *  It includes a function to build attributes from the context and requested attributes,
+ * and a function to colour log types.
+ */
+
 import { type Context } from 'elysia';
 import type { AttributeMap, Attribute, LogType, LogLevelColour } from './types';
 import chalk, { ChalkInstance } from 'chalk';
 
 /**
- * Builds an attribute object containing the requested attributes from the context.
- * @param ctx - The context of the current request.
- * @param reqAttrs - A map of requested attributes.
- * @returns An object containing the requested attributes.
+ * @param ctx Elysia context
+ * @param reqAttrs A map of attributes to be built
+ * @returns The built attributes
  */
 export const buildAttrs = (ctx: Context, reqAttrs: AttributeMap): Attribute => {
   const { request, path, body, query, set } = ctx;
@@ -60,6 +66,11 @@ export const buildAttrs = (ctx: Context, reqAttrs: AttributeMap): Attribute => {
   return attrs;
 };
 
+/**
+ * @param type the log type to colour
+ * @param colourDef a map of log types to colours
+ * @returns a string with the ANSI colour code wrapped around the log type
+ */
 export const colourLogType = (
   type: LogType,
   colourDef: LogLevelColour
