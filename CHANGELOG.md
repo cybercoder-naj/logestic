@@ -1,4 +1,11 @@
 # CHANGELOG
+## [1.0.0-alpha.3] - 25-03-2024
+### Changed
+- README file and updated the Wiki page.
+
+### Fixed
+- Default configuration for `fancy` preset.
+
 ## [1.0.0-alpha.2] - 21-03-2024
 ### Added
 - Customisable log type/level colour.
