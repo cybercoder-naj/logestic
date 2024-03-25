@@ -12,16 +12,25 @@ const getDateTimeString = (date: Date) => {
   return `${day}/${month}/${year} ${hours}:${minutes}:${seconds}`;
 };
 
-export default (options: LogesticOptions) =>
-  new Logestic(options).use(['time', 'method', 'path']).format({
-    onSuccess({ time, method, path }) {
-      const dateTime = chalk.gray(getDateTimeString(time!!));
-      const methodPath = chalk.cyan(`${method} ${path}`);
+const defaultOptions: LogesticOptions = {
+  showLevel: true
+};
 
-      return `${dateTime} ${methodPath}`;
-    },
-    onFailure({ request, datetime }) {
-      const dateTime = getDateTimeString(datetime!!);
-      return chalk.red(`${dateTime} ${request.method} ${request.url}`);
-    }
-  });
+export default (options: LogesticOptions) =>
+  new Logestic({
+    ...defaultOptions,
+    ...options
+  })
+    .use(['time', 'method', 'path'])
+    .format({
+      onSuccess({ time, method, path }) {
+        const dateTime = chalk.gray(getDateTimeString(time!!));
+        const methodPath = chalk.cyan(`${method} ${path}`);
+
+        return `${dateTime} ${methodPath}`;
+      },
+      onFailure({ request, datetime }) {
+        const dateTime = getDateTimeString(datetime!!);
+        return chalk.red(`${dateTime} ${request.method} ${request.url}`);
+      }
+    });
