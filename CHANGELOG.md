@@ -4,8 +4,8 @@
 - Request duration returns time in microseconds.
 - `fancy` preset includes the duration on successful requests.
 
-<!-- ### Fixed
-- Incorrect status code when returning with `error` function ([#11](https://github.com/cybercoder-naj/logestic/issues/11)) -->
+### Fixed
+- Incorrect status code when returning with `error` function ([#11](https://github.com/cybercoder-naj/logestic/issues/11))
 
 ## [1.0.0-alpha.4] - 26-03-2024
 ### Added
