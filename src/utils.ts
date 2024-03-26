@@ -14,7 +14,11 @@ import chalk, { ChalkInstance } from 'chalk';
  * @param reqAttrs A map of attributes to be built
  * @returns The built attributes
  */
-export const buildAttrs = (ctx: Context, reqAttrs: AttributeMap): Attribute => {
+export const buildAttrs = (
+  ctx: Context,
+  reqAttrs: AttributeMap,
+  timeStart: number
+): Attribute => {
   const { request, path, body, query, set } = ctx;
 
   let attrs: Attribute = {};
@@ -59,6 +63,11 @@ export const buildAttrs = (ctx: Context, reqAttrs: AttributeMap): Attribute => {
 
       case 'userAgent':
         attrs.userAgent = request.headers.get('user-agent') || '<user-agent?>';
+        break;
+
+      case 'duration':
+        const now = Date.now();
+        attrs.duration = now - timeStart;
         break;
     }
   }

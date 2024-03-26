@@ -1,4 +1,11 @@
 # CHANGELOG
+## [1.0.0-alpha.4] - 26-03-2024
+### Added
+- Request duration as a logging feature
+
+### Fixed
+- Incorrect status code when returning with `error` function
+
 ## [1.0.0-alpha.3] - 25-03-2024
 ### Changed
 - README file and updated the Wiki page.
