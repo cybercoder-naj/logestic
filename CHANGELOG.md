@@ -1,4 +1,16 @@
 # CHANGELOG
+## [1.0.0-alpha.5] - 26-03-2024
+### Changed
+- Request duration returns time in microseconds.
+- `fancy` preset includes the duration on successful requests.
+
+<!-- ### Fixed
+- Incorrect status code when returning with `error` function ([#11](https://github.com/cybercoder-naj/logestic/issues/11)) -->
+
+## [1.0.0-alpha.4] - 26-03-2024
+### Added
+- Request duration as a logging feature ([#10](https://github.com/cybercoder-naj/logestic/issues/10))
+
 ## [1.0.0-alpha.3] - 25-03-2024
 ### Changed
 - README file and updated the Wiki page.

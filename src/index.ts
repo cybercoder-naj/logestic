@@ -125,13 +125,20 @@ export class Logestic {
    */
   format(this: Logestic, formatAttr: FormatObj) {
     return this.build()
-      .onAfterHandle({ as: 'global' }, ctx => {
+      .state('logestic_timeStart', 0n)
+      .onRequest(({ store }) => {
+        store.logestic_timeStart = process.hrtime.bigint();
+      })
+      .onResponse({ as: 'global' }, ctx => {
         if (!this.httpLogging) {
           return;
         }
 
         // get attributes, format and log
-        let attrs = buildAttrs(ctx, this.requestedAttrs);
+        const {
+          store: { logestic_timeStart }
+        } = ctx;
+        let attrs = buildAttrs(ctx, this.requestedAttrs, logestic_timeStart);
         let msg = formatAttr.onSuccess(attrs);
         if (this.showLevel) {
           msg = `${colourLogType('http', this.logLevelColour)} ${msg}`;
