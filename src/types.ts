@@ -18,7 +18,7 @@ export type Attribute = {
   status?: any;
   referer?: string;
   userAgent?: string;
-  duration?: number;
+  duration?: bigint;
 };
 
 export type ErrorAttribute = {

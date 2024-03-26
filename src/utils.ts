@@ -17,7 +17,7 @@ import chalk, { ChalkInstance } from 'chalk';
 export const buildAttrs = (
   ctx: Context,
   reqAttrs: AttributeMap,
-  timeStart: number
+  timeStart: bigint
 ): Attribute => {
   const { request, path, body, query, set } = ctx;
 
@@ -66,8 +66,8 @@ export const buildAttrs = (
         break;
 
       case 'duration':
-        const now = Date.now();
-        attrs.duration = now - timeStart;
+        const now = process.hrtime.bigint();
+        attrs.duration = (now - timeStart) / 1000n;
         break;
     }
   }

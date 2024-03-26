@@ -125,11 +125,11 @@ export class Logestic {
    */
   format(this: Logestic, formatAttr: FormatObj) {
     return this.build()
-      .state('logestic_timeStart', 0)
+      .state('logestic_timeStart', 0n)
       .onRequest(({ store }) => {
-        store.logestic_timeStart = Date.now();
+        store.logestic_timeStart = process.hrtime.bigint();
       })
-      .onAfterHandle({ as: 'global' }, ctx => {
+      .onResponse({ as: 'global' }, ctx => {
         if (!this.httpLogging) {
           return;
         }
