@@ -1,10 +1,10 @@
 # CHANGELOG
 ## [1.0.0-alpha.4] - 26-03-2024
 ### Added
-- Request duration as a logging feature
+- Request duration as a logging feature ([#10](https://github.com/cybercoder-naj/logestic/issues/10))
 
 ### Fixed
-- Incorrect status code when returning with `error` function
+- Incorrect status code when returning with `error` function ([#11](https://github.com/cybercoder-naj/logestic/issues/11))
 
 ## [1.0.0-alpha.3] - 25-03-2024
 ### Changed
