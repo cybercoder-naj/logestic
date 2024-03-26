@@ -21,13 +21,13 @@ export default (options: LogesticOptions) =>
     ...defaultOptions,
     ...options
   })
-    .use(['time', 'method', 'path'])
+    .use(['time', 'method', 'path', 'duration'])
     .format({
-      onSuccess({ time, method, path }) {
+      onSuccess({ time, method, path, duration }) {
         const dateTime = chalk.gray(getDateTimeString(time!!));
         const methodPath = chalk.cyan(`${method} ${path}`);
 
-        return `${dateTime} ${methodPath}`;
+        return `${dateTime} ${methodPath} ${duration}μs`;
       },
       onFailure({ request, datetime }) {
         const dateTime = getDateTimeString(datetime!!);
