@@ -62,11 +62,18 @@ export class Logestic {
     }
 
     // Custom file destination
-    this.dest = this.createFileIfNotExists(dest);
+    this.createFileIfNotExists(dest)
+      .then(file => (this.dest = file))
+      .catch(err => {
+        throw err;
+      });
   }
 
-  private createFileIfNotExists(dest: BunFile): BunFile {
-    if (!dest.exists()) {
+  private async createFileIfNotExists(dest: BunFile): Promise<BunFile> {
+    console.log('createFileIfNotExists', dest);
+    console.log('createFileIfNotExists, dest.exists()', dest.exists());
+    if (!(await dest.exists())) {
+      console.log('createFileIfNotExists, writing to file');
       Bun.write(dest, '');
     }
     return dest;

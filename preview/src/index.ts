@@ -2,7 +2,12 @@ import { Elysia } from 'elysia';
 import { Logestic } from 'logestic';
 
 const app = new Elysia()
-  .use(Logestic.preset('common', { showLevel: true }))
+  .use(
+    Logestic.preset('common', {
+      showLevel: true,
+      dest: Bun.file('./server.log')
+    })
+  )
   .get('/', () => 'Hello, world!')
   .get('/hello/:name', ({ params: { name } }) => `Hello, ${name}!`)
   .get('/returnBad', ({ set }) => {
