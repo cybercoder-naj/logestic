@@ -13,8 +13,9 @@ import {
 } from './types';
 import { BunFile } from 'bun';
 import c from 'chalk';
-import { buildAttrs, colourLogType } from './utils';
+import { buildAttrs, colourLogType, removeAnsi } from './utils';
 import { getPreset } from './presets';
+import fs from 'node:fs';
 
 export type { Attribute, LogesticOptions };
 export const chalk = c; // Re-export chalk for custom formatting
@@ -70,10 +71,7 @@ export class Logestic {
   }
 
   private async createFileIfNotExists(dest: BunFile): Promise<BunFile> {
-    console.log('createFileIfNotExists', dest);
-    console.log('createFileIfNotExists, dest.exists()', dest.exists());
     if (!(await dest.exists())) {
-      console.log('createFileIfNotExists, writing to file');
       Bun.write(dest, '');
     }
     return dest;
@@ -163,21 +161,19 @@ export class Logestic {
   }
 
   private async log(msg: string): Promise<void> {
-    let content: string | undefined = undefined;
-    // Get the content of the file if it is not stdout
-    // Possible race condition in the file for multiple requests
-    if (this.dest !== Bun.stdout) {
-      content = await this.dest.text();
+    const msgNewLine = `${msg}\n`;
+    if (!this.dest.name || !this.dest.name.length) {
+      // This is either stdout or stderr
+      Bun.write(this.dest, msgNewLine);
+      return;
     }
 
-    // Append the log message
-    const writer = this.dest.writer();
-    if (content) {
-      writer.write(content);
-    }
-    writer.write(msg);
-    writer.write('\n');
-    writer.flush();
+    const sanitised = removeAnsi(msgNewLine);
+    fs.appendFile(this.dest.name, sanitised, err => {
+      if (err) {
+        throw err;
+      }
+    });
   }
 
   /**

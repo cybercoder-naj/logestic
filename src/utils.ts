@@ -116,3 +116,7 @@ export const colourLogType = (
   const withSpaces = ` ${type.toUpperCase()} `;
   return bgColour?.(withSpaces) ?? withSpaces;
 };
+
+export function removeAnsi(text: string): string {
+  return text.replace(/\u001b\[\d*m/g, '').trimStart();
+}
