@@ -10,15 +10,13 @@ An advanced and customisable logging library for [ElysiaJS](https://elysiajs.com
 - [Table of Contents](#table-of-contents)
 - [Installation](#installation)
 - [Usage](#usage)
-  - [Preset request logging](#preset-request-logging)
-  - [Custom request logging](#custom-request-logging)
+- [Documentation](#documentation)
 - [Contributing Guidelines](#contributing-guidelines)
 - [License](#license)
-- [Authors](#authors)
 
 ## Installation
 
-Add the package to your Elysia Project. 
+Add the package to your Elysia Project via [bun](https://bun.sh). 
 ```bash
   bun add logestic
 ```
@@ -26,11 +24,7 @@ Add the package to your Elysia Project.
 
 ## Usage
 
-There are two ways to add logging to your Elysia application.
-
-### Preset request logging
-
-Currently, there are these [presets](./src/presets/index.ts) available to use. 
+There are two ways to add logging to your Elysia application. The quickest way to use this logger is using a preset. 
 
 ```typescript
 import { Elysia } from 'elysia';
@@ -39,46 +33,17 @@ import { Logestic } from 'logestic';
 const app = new Elysia()
   .use(Logestic.preset('common'))
   .get('/', () => "Hello from server")
-  .listen(5566);
-```
-
-![Custom Preset](./screenshots/custom-preset.png)
-
-### Custom request logging
-
-If you don't like any of presets, you can configure Logestic to log your requests in your way.
-
-1. Create a `Logestic` instance, optionally where you wish to log.
-2. Call `use` to tell `Logestic` the information you wish to use.
-3. Finally, create an `Elysia` instance on `custom` with the formatting function. 
-
-```typescript
-// ./logger.ts
-import { Logestic, chalk } from 'logestic';
-
-// exports an Elysia instance
-export default new Logestic({
-  dest: Bun.file('request.log')
-}).use(['method', 'path', 'time', 'status'])
-  .format({
-    onSuccess({ method, path, time, status }) {
-      return `[${time}]: ${method} ${path} | ${status}`
-    },
-    onFailure({ request, error, code, datetime }) {
-      return chalk.red(`ERROR [${datetime}]: ${request.method} ${request.url} | ${code}`)
-    }
+  /* ... */
+  .listen(3000, () => {
+    console.log("Server is running on port 3000")
   });
-
-// ./index.ts
-import myLogger from './logger';
-
-const app = new Elysia()
-  .use(myLogger)
-  .get('/', () => "Hello from server")
-  .listen(5566);
 ```
 
-Consider contributing your own preset; check [contributing guidelines](#contributing-guidelines).
+These [presets](https://github.com/cybercoder-naj/logestic/wiki/Presets) available to use. 
+
+## Documentation
+
+To view the full documentation, view the [wiki](https://github.com/cybercoder-naj/logestic/wiki/).
 
 ## Contributing Guidelines
 
@@ -87,7 +52,3 @@ See [CONTRIBUTING.md](./CONTRIBUTING.md)
 ## License
 
 [MIT](./LICENSE)
-
-## Authors
-
-- [@cybercoder-naj](https://github.com/cybercoder-naj)

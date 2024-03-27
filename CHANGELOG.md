@@ -1,4 +1,43 @@
 # CHANGELOG
+## [1.0.0] - 2703-2024
+- First stable release! 🎆
+
+## [1.0.0-alpha.6] - 27-03-2024
+### Fixed
+- Fix issues related to file logging. ([#14](https://github.com/cybercoder-naj/logestic/issues/14))
+
+## [1.0.0-alpha.5] - 26-03-2024
+### Changed
+- Request duration returns time in microseconds.
+- `fancy` preset includes the duration on successful requests.
+
+### Fixed
+- Incorrect status code when returning with `error` function ([#11](https://github.com/cybercoder-naj/logestic/issues/11))
+
+## [1.0.0-alpha.4] - 26-03-2024
+### Added
+- Request duration as a logging feature ([#10](https://github.com/cybercoder-naj/logestic/issues/10))
+
+## [1.0.0-alpha.3] - 25-03-2024
+### Changed
+- README file and updated the Wiki page.
+
+### Fixed
+- Default configuration for `fancy` preset.
+
+## [1.0.0-alpha.2] - 21-03-2024
+### Added
+- Customisable log type/level colour.
+- Option to disable implicit and explicit logging.
+- `build` function to create a logger wihout any `httpLogging`.
+
+### Changed
+- Passing in options will override preset options.
+- Type loss when using Logestic middleware.
+
+## [1.0.0-alpha.1] - 21-03-2024
+*Redacted. see 1.0.0-alpha.2 for changes*
+
 ## [0.5.0] - 21-03-2024
 ### Added
 - Origin/level of the log message, 'HTTP', 'ERROR', 'WARN', 'DEBUG', 'INFO'.

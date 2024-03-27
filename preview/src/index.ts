@@ -2,7 +2,7 @@ import { Elysia } from 'elysia';
 import { Logestic } from 'logestic';
 
 const app = new Elysia()
-  .use(Logestic.preset('common', { showType: true }))
+  .use(Logestic.preset('fancy'))
   .get('/', () => 'Hello, world!')
   .get('/hello/:name', ({ params: { name } }) => `Hello, ${name}!`)
   .get('/returnBad', ({ set }) => {

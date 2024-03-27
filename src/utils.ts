@@ -1,14 +1,24 @@
+/**
+ * @module utils
+ * @description This module provides utility functions for logging.
+ *  It includes a function to build attributes from the context and requested attributes,
+ * and a function to colour log types.
+ */
+
 import { type Context } from 'elysia';
-import type { AttributeMap, Attribute, LogType } from './types';
-import chalk from 'chalk';
+import type { AttributeMap, Attribute, LogType, LogLevelColour } from './types';
+import chalk, { ChalkInstance } from 'chalk';
 
 /**
- * Builds an attribute object containing the requested attributes from the context.
- * @param ctx - The context of the current request.
- * @param reqAttrs - A map of requested attributes.
- * @returns An object containing the requested attributes.
+ * @param ctx Elysia context
+ * @param reqAttrs A map of attributes to be built
+ * @returns The built attributes
  */
-export const buildAttrs = (ctx: Context, reqAttrs: AttributeMap): Attribute => {
+export const buildAttrs = (
+  ctx: Context,
+  reqAttrs: AttributeMap,
+  timeStart: bigint
+): Attribute => {
   const { request, path, body, query, set } = ctx;
 
   let attrs: Attribute = {};
@@ -54,36 +64,59 @@ export const buildAttrs = (ctx: Context, reqAttrs: AttributeMap): Attribute => {
       case 'userAgent':
         attrs.userAgent = request.headers.get('user-agent') || '<user-agent?>';
         break;
+
+      case 'duration':
+        const now = process.hrtime.bigint();
+        attrs.duration = (now - timeStart) / 1000n;
+        break;
     }
   }
 
   return attrs;
 };
 
-export const colourLogType = (type: LogType): string => {
-  let bgColour: (_: string) => string = chalk.bgBlack;
+/**
+ * @param type the log type to colour
+ * @param colourDef a map of log types to colours
+ * @returns a string with the ANSI colour code wrapped around the log type
+ */
+export const colourLogType = (
+  type: LogType,
+  colourDef: LogLevelColour
+): string => {
+  let bgColour: ChalkInstance = chalk.bgBlack;
+  // If the log type is not in the colour definition, use the default colour
   switch (type) {
-    case 'HTTP':
-      bgColour = chalk.bgBlue;
+    case 'http':
+      bgColour =
+        (colourDef[type] && chalk.hex(colourDef[type]!!)) || chalk.bgBlue;
       break;
 
-    case 'INFO':
-      bgColour = chalk.bgGreen;
+    case 'info':
+      bgColour =
+        (colourDef[type] && chalk.hex(colourDef[type]!!)) || chalk.bgGreen;
       break;
 
-    case 'WARN':
-      bgColour = chalk.bgYellow;
+    case 'warn':
+      bgColour =
+        (colourDef[type] && chalk.hex(colourDef[type]!!)) || chalk.bgYellow;
       break;
 
-    case 'DEBUG':
-      bgColour = chalk.bgCyan;
+    case 'debug':
+      bgColour =
+        (colourDef[type] && chalk.hex(colourDef[type]!!)) || chalk.bgCyan;
       break;
 
-    case 'ERROR':
-      bgColour = chalk.bgRed;
+    case 'error':
+      bgColour =
+        (colourDef[type] && chalk.hex(colourDef[type]!!)) || chalk.bgRed;
       break;
   }
 
-  const withSpaces = ` ${type} `;
+  const withSpaces = ` ${type.toUpperCase()} `;
   return bgColour?.(withSpaces) ?? withSpaces;
 };
+
+export function removeAnsi(text: string): string {
+  return text.replace(/\u001b\[\d*m/g, '').trimStart();
+}

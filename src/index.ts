@@ -1,40 +1,50 @@
 /**
- * @fileoverview This module provides a logging utility for Elysia, a Node.js framework.
- *   It allows for customizable logging of HTTP requests and responses.
+ * @module logestic
+ * @description This module provides a class to configure and perform logging.
  */
 
 import Elysia from 'elysia';
-import { Attribute, FormatObj, LogesticOptions, Presets } from './types';
-import presets from './presets';
+import {
+  Attribute,
+  FormatObj,
+  LogLevelColour,
+  LogesticOptions,
+  Preset
+} from './types';
 import { BunFile } from 'bun';
 import c from 'chalk';
-import { buildAttrs, colourLogType } from './utils';
+import { buildAttrs, colourLogType, removeAnsi } from './utils';
+import { getPreset } from './presets';
+import fs from 'node:fs';
 
-export type { Attribute };
+export type { Attribute, LogesticOptions };
 export const chalk = c; // Re-export chalk for custom formatting
 
 /**
  * Logestic class provides methods to configure and perform logging.
  */
 export class Logestic {
-  private static defaultOptions: LogesticOptions = {
-    dest: Bun.stdout,
-    showLevel: false
-  };
-
   private requestedAttrs: {
     [key in keyof Attribute]: boolean;
   };
   private dest!: BunFile;
-  private showType: boolean;
+  private showLevel: boolean;
+  private logLevelColour: LogLevelColour;
+  private httpLogging: boolean;
+  private explicitLogging: boolean;
 
   /**
-   * Constructs a new Logestic instance.
-   * @param dest - Destination of the logs, Defaults to the console logger.
+   * Creates a new Logestic instance.
+   *
+   * @param options - The options to configure the Logestic instance.
+   * @see LogesticOptions
    */
-  constructor(options: LogesticOptions = Logestic.defaultOptions) {
+  constructor(options: LogesticOptions = {}) {
     this.requestedAttrs = {};
-    this.showType = options.showLevel || false;
+    this.showLevel = options.showLevel || false;
+    this.logLevelColour = options.logLevelColour || {};
+    this.httpLogging = options.httpLogging || true;
+    this.explicitLogging = options.explicitLogging || true;
 
     this.setDest(options.dest || Bun.stdout);
   }
@@ -53,11 +63,15 @@ export class Logestic {
     }
 
     // Custom file destination
-    this.dest = this.createFileIfNotExists(dest);
+    this.createFileIfNotExists(dest)
+      .then(file => (this.dest = file))
+      .catch(err => {
+        throw err;
+      });
   }
 
-  private createFileIfNotExists(dest: BunFile): BunFile {
-    if (!dest.exists()) {
+  private async createFileIfNotExists(dest: BunFile): Promise<BunFile> {
+    if (!(await dest.exists())) {
       Bun.write(dest, '');
     }
     return dest;
@@ -73,113 +87,159 @@ export class Logestic {
   use(attrs: keyof Attribute | (keyof Attribute)[]): Logestic {
     if (Array.isArray(attrs)) {
       for (const attr of attrs) {
-        this.requestedAttrs[attr] = true;
+        this._use(attr);
       }
       return this;
     }
 
     // Single attribute
-    this.requestedAttrs[attrs] = true;
+    this._use(attrs);
     return this;
   }
 
-  /**
-   * Creates a new Elysia instance with a preset logging configuration.
-   * @param name - The name of the preset to use.
-   * @param dest - A custom logger function. Defaults to the console logger.
-   * @returns A new Elysia instance.
-   */
-  static preset(
-    name: keyof Presets,
-    options: LogesticOptions = Logestic.defaultOptions
-  ): Elysia {
-    return presets[name](options);
+  private _use(attr: keyof Attribute) {
+    this.requestedAttrs[attr] = true;
   }
 
   /**
-   * Configures a custom logging format and attaches it to the Elysia instance.
-   * @param formatAttr - A function that takes an Attribute object and returns a string.
-   * @returns A new Elysia instance.
+   * @param name The name of the preset to use.
+   * @param options The options to configure the preset. Any options provided will override the preset's default options.
+   * @returns A new Elysia instance with the logger plugged in.
    */
-  format(formatAttr: FormatObj): Elysia {
-    return new Elysia()
-      .onAfterHandle({ as: 'global' }, ctx => {
-        let attrs = buildAttrs(ctx, this.requestedAttrs);
+  static preset(name: Preset, options: LogesticOptions = {}) {
+    return getPreset(name)(options);
+  }
+
+  /**
+   * Use this when you do not want any http logging.
+   *
+   * @returns Elysia instance with the logger plugged in.
+   */
+  build(this: Logestic) {
+    return new Elysia({
+      name: 'logestic'
+    }).decorate('logestic', this);
+  }
+
+  /**
+   * Successful requests will not log if httpLogging is disabled.
+   * Error logs will always be logged regardless.
+   *
+   * @param formatAttr - The format object containing functions to format successful and failed logs.
+   * @returns Elysia instance with the logger plugged in.
+   */
+  format(this: Logestic, formatAttr: FormatObj) {
+    return this.build()
+      .state('logestic_timeStart', 0n)
+      .onRequest(({ store }) => {
+        store.logestic_timeStart = process.hrtime.bigint();
+      })
+      .onResponse({ as: 'global' }, ctx => {
+        if (!this.httpLogging) {
+          return;
+        }
+
+        // get attributes, format and log
+        const {
+          store: { logestic_timeStart }
+        } = ctx;
+        let attrs = buildAttrs(ctx, this.requestedAttrs, logestic_timeStart);
         let msg = formatAttr.onSuccess(attrs);
-        if (this.showType) {
-          msg = `${colourLogType('HTTP')} ${msg}`;
+        if (this.showLevel) {
+          msg = `${colourLogType('http', this.logLevelColour)} ${msg}`;
         }
         this.log(msg);
       })
       .onError({ as: 'global' }, ({ request, error, code }) => {
         let datetime = new Date();
         let msg = formatAttr.onFailure({ request, error, code, datetime });
-        if (this.showType) {
-          msg = `${colourLogType('ERROR')} ${msg}`;
+        if (this.showLevel) {
+          msg = `${colourLogType('error', this.logLevelColour)} ${msg}`;
         }
         this.log(msg);
       });
   }
 
   private async log(msg: string): Promise<void> {
-    let content: string | undefined = undefined;
-    if (this.dest !== Bun.stdout) {
-      content = await this.dest.text();
+    const msgNewLine = `${msg}\n`;
+    if (!this.dest.name || !this.dest.name.length) {
+      // This is either stdout or stderr
+      Bun.write(this.dest, msgNewLine);
+      return;
     }
 
-    const writer = this.dest.writer();
-    if (content) {
-      writer.write(content);
-    }
-    writer.write(msg);
-    writer.write('\n');
-    writer.flush();
+    const sanitised = removeAnsi(msgNewLine);
+    fs.appendFile(this.dest.name, sanitised, err => {
+      if (err) {
+        throw err;
+      }
+    });
   }
 
   /**
-   * Logs a message to the destination.
-   * @param msg - The message to log.
+   * Logs an info message to the destination.
+   *
+   * @param msg The message to log.
    */
   info(msg: string): void {
+    if (!this.explicitLogging) {
+      return;
+    }
+
     let _msg = msg;
-    if (this.showType) {
-      _msg = `${colourLogType('INFO')} ${msg}`;
+    if (this.showLevel) {
+      _msg = `${colourLogType('info', this.logLevelColour)} ${msg}`;
     }
     this.log(_msg);
   }
 
   /**
    * Logs a warning message to the destination.
-   * @param msg - The message to log.
+   *
+   * @param msg The message to log.
    */
   warn(msg: string): void {
+    if (!this.explicitLogging) {
+      return;
+    }
+
     let _msg = msg;
-    if (this.showType) {
-      _msg = `${colourLogType('WARN')} ${msg}`;
+    if (this.showLevel) {
+      _msg = `${colourLogType('warn', this.logLevelColour)} ${msg}`;
     }
     this.log(_msg);
   }
 
   /**
    * Logs a debug message to the destination.
-   * @param msg - The message to log.
+   *
+   * @param msg The message to log.
    */
   debug(msg: string): void {
+    if (!this.explicitLogging) {
+      return;
+    }
+
     let _msg = msg;
-    if (this.showType) {
-      _msg = `${colourLogType('DEBUG')} ${msg}`;
+    if (this.showLevel) {
+      _msg = `${colourLogType('debug', this.logLevelColour)} ${msg}`;
     }
     this.log(_msg);
   }
 
   /**
    * Logs an error message to the destination.
-   * @param msg - The message to log.
+   *
+   * @param msg The message to log.
    */
   error(msg: string): void {
+    if (!this.explicitLogging) {
+      return;
+    }
+
     let _msg = msg;
-    if (this.showType) {
-      _msg = `${colourLogType('ERROR')} ${msg}`;
+    if (this.showLevel) {
+      _msg = `${colourLogType('error', this.logLevelColour)} ${msg}`;
     }
     this.log(_msg);
   }

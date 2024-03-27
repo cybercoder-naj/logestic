@@ -18,6 +18,6 @@
   "homepage": "https://github.com/cybercoder-naj/logestic#readme",
   "dependencies": {
     "elysia": "^1.0.0",
-    "logestic": ".."
+    "logestic": "file:.."
   }
 }

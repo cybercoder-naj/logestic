@@ -1,29 +1,24 @@
 /**
- * This TypeScript module defines types for logging attributes and presets.
- *
- * The Attribute type is a flexible representation of log entry.
- * AttributeMap is a utility type for toggling these attributes.
- * PresetValue and Presets define structures for preconfigured logging formats.
+ * @module types
+ * @description This module provides types for the Logestic module.
+ * It includes types for attributes, presets, and options.
+ * It also includes a type for the format object.
  */
 
 import { BunFile } from 'bun';
-import { Elysia } from 'elysia';
 
-/**
- * `Attribute` is a type representing possible attributes of a log entry.
- * Each attribute is optional and can be of various types.
- */
 export type Attribute = {
-  ip?: string; // The IP address of the client making the request
-  method?: string; // The HTTP method used in the request
-  path?: string; // The path of the request
-  body?: any; // The body of the request
-  query?: Record<string, string | undefined>; // The query parameters of the request
-  time?: Date; // The time when the request was made
-  contentLength?: number; // The length of the response content
-  status?: any; // The status code of the response
-  referer?: string; // The referer URL of the request
-  userAgent?: string; // The user agent string of the client making the request
+  ip?: string;
+  method?: string;
+  path?: string;
+  body?: any;
+  query?: Record<string, string | undefined>;
+  time?: Date;
+  contentLength?: number;
+  status?: any;
+  referer?: string;
+  userAgent?: string;
+  duration?: bigint;
 };
 
 export type ErrorAttribute = {
@@ -42,22 +37,36 @@ export type AttributeMap = {
 };
 
 /**
- * `Presets` is a type representing a collection of preset configurations.
- * Each key is a preset name and the value is a `PresetValue`.
+ * `Presets` is an object that contains preset configurations for the Logestic module.
  */
-export type Presets = {
-  common: (_: LogesticOptions) => Elysia; // A common preset configuration
-  fancy: (_: LogesticOptions) => Elysia;
-};
-
+export type Preset = 'common' | 'fancy';
+/**
+ * `FormatObj` is an object that contains functions to format successful and failed logs.
+ */
 export type FormatObj = {
   onSuccess: (attr: Attribute) => string;
   onFailure: (attr: ErrorAttribute) => string;
 };
 
-export type LogType = 'HTTP' | 'INFO' | 'WARN' | 'DEBUG' | 'ERROR';
+export type LogType = 'http' | 'info' | 'warn' | 'debug' | 'error';
+export type LogLevelColour = {
+  [key in LogType]?: string;
+};
 
+/**
+ * `LogesticOptions` is an object that contains options for the Logestic module.
+ *
+ * @property dest - The logging destination. It cannot be Bun.stdin. Defaults to Bun.stdout.
+ * @property showLevel - Whether to show the log level. Defaults to `false`.
+ * @property logLevelColour - The colour of each log level.
+ * @property httpLogging - Whether to log HTTP requests. Defaults to `true`.
+ * @property explicitLogging - Whether to log explicit logs. Defaults to `true`.
+ * @see LogLevelColour
+ */
 export type LogesticOptions = {
   dest?: BunFile;
   showLevel?: boolean;
+  logLevelColour?: LogLevelColour;
+  httpLogging?: boolean;
+  explicitLogging?: boolean;
 };
