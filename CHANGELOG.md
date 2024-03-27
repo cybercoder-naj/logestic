@@ -1,4 +1,8 @@
 # CHANGELOG
+## [1.0.0-alpha.6] - 26-03-2024
+### Fixed
+- Fix issues related to file logging. ([#14](https://github.com/cybercoder-naj/logestic/issues/14))
+
 ## [1.0.0-alpha.5] - 26-03-2024
 ### Changed
 - Request duration returns time in microseconds.
