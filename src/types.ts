@@ -15,7 +15,7 @@ export type Attribute = {
   query?: Record<string, string | undefined>;
   time?: Date;
   contentLength?: number;
-  status?: any;
+  status?: number;
   referer?: string;
   userAgent?: string;
   duration?: bigint;
