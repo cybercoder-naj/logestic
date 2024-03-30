@@ -22,7 +22,7 @@ export const buildAttrs = <K extends keyof Attribute>(
 ): Pick<Attribute, K> => {
   const { request, path, body, query, set } = ctx;
 
-  let attrs: Attribute = {};
+  let attrs: Partial<Attribute> = {};
   for (const key in reqAttrs) {
     const k = key as keyof Attribute;
     switch (k) {
@@ -76,7 +76,7 @@ export const buildAttrs = <K extends keyof Attribute>(
     }
   }
 
-  return attrs;
+  return attrs as Pick<Attribute, K>;
 };
 
 /**

@@ -8,17 +8,17 @@
 import { BunFile } from 'bun';
 
 export type Attribute = {
-  ip?: string;
-  method?: string;
-  path?: string;
-  body?: any;
-  query?: Record<string, string | undefined>;
-  time?: Date;
-  contentLength?: number;
-  status?: number;
-  referer?: string;
-  userAgent?: string;
-  duration?: bigint;
+  ip: string;
+  method: string;
+  path: string;
+  body: any;
+  query: Record<string, string | undefined>;
+  time: Date;
+  contentLength: number;
+  status: number;
+  referer: string;
+  userAgent: string;
+  duration: bigint;
 };
 
 export type ErrorAttribute = {
