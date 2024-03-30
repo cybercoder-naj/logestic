@@ -1,5 +1,9 @@
 # CHANGELOG
-## [1.0.0] - 2703-2024
+## [1.0.1] - 30-03-2024
+### Fixed
+- Status of type `number` and not `any`
+
+## [1.0.0] - 27-03-2024
 - First stable release! 🎆
 
 ## [1.0.0-alpha.6] - 27-03-2024
