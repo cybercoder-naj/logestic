@@ -1,4 +1,8 @@
 # CHANGELOG
+## [1.1.0] - 31-03-2024
+### Added
+- Optional `onRequest` logging formatter for hooking onto onRequest. ([#13](https://github.com/cybercoder-naj/logestic/issues/13))
+
 ## [1.0.1] - 30-03-2024
 ### Added
 - Type-safety to onSuccess method, based on attributes passed on `use`. ([#6](https://github.com/cybercoder-naj/logestic/issues/6))
