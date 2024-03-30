@@ -36,6 +36,7 @@ export type Preset = 'common' | 'fancy';
  * `Callback` is an object that contains functions to format successful and failed logs.
  */
 export type Callback<K extends keyof Attribute> = {
+  onRequest?: (attr: Request) => string;
   onSuccess: (attr: Pick<Attribute, K>) => string;
   onFailure: (attr: ErrorAttribute) => string;
 };

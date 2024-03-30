@@ -129,8 +129,16 @@ export class Logestic<K extends keyof Attribute = keyof Attribute> {
   format(this: Logestic, formatAttr: Callback<K>) {
     return this.build()
       .state('logestic_timeStart', 0n)
-      .onRequest(({ store }) => {
+      .onRequest(({ store, request }) => {
         store.logestic_timeStart = process.hrtime.bigint();
+
+        if (formatAttr.onRequest) {
+          let msg = formatAttr.onRequest(request);
+          if (this.showLevel) {
+            msg = `${colourLogType('http', this.logLevelColour)} ${msg}`;
+          }
+          this.log(msg);
+        }
       })
       .onResponse({ as: 'global' }, ctx => {
         if (!this.httpLogging) {
