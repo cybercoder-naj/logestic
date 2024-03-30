@@ -29,14 +29,6 @@ export type ErrorAttribute = {
 };
 
 /**
- * `AttributeMap` is a type that maps each key of `Attribute` to a boolean.
- * It is used to indicate which attributes are enabled or disabled.
- */
-export type AttributeMap = {
-  [key in keyof Attribute]: boolean;
-};
-
-/**
  * `Presets` is an object that contains preset configurations for the Logestic module.
  */
 export type Preset = 'common' | 'fancy';

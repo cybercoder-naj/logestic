@@ -7,7 +7,7 @@
 
 import { StatusMap } from 'elysia';
 import { type Context } from 'elysia';
-import type { AttributeMap, Attribute, LogType, LogLevelColour } from './types';
+import type { Attribute, LogType, LogLevelColour } from './types';
 import chalk, { ChalkInstance } from 'chalk';
 
 /**
