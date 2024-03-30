@@ -1,5 +1,8 @@
 # CHANGELOG
 ## [1.0.1] - 30-03-2024
+### Added
+- Type-safety to onSuccess method, based on attributes passed on `use`. ([#6](https://github.com/cybercoder-naj/logestic/issues/6))
+
 ### Fixed
 - Status of type `number` and not `any`. ([#5](https://github.com/cybercoder-naj/logestic/issues/5))
 
