@@ -5,6 +5,7 @@
  * and a function to colour log types.
  */
 
+import { StatusMap } from 'elysia';
 import { type Context } from 'elysia';
 import type { AttributeMap, Attribute, LogType, LogLevelColour } from './types';
 import chalk, { ChalkInstance } from 'chalk';
@@ -54,7 +55,10 @@ export const buildAttrs = (
         break;
 
       case 'status':
-        attrs.status = set.status;
+        if (!set.status) break;
+
+        attrs.status =
+          typeof set.status === 'number' ? set.status : StatusMap[set.status];
         break;
 
       case 'referer':
