@@ -1,7 +1,7 @@
 # CHANGELOG
 ## [1.0.1] - 30-03-2024
 ### Fixed
-- Status of type `number` and not `any`
+- Status of type `number` and not `any`. ([#5](https://github.com/cybercoder-naj/logestic/issues/5))
 
 ## [1.0.0] - 27-03-2024
 - First stable release! 🎆
