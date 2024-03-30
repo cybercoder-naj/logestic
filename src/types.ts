@@ -8,17 +8,17 @@
 import { BunFile } from 'bun';
 
 export type Attribute = {
-  ip?: string;
-  method?: string;
-  path?: string;
-  body?: any;
-  query?: Record<string, string | undefined>;
-  time?: Date;
-  contentLength?: number;
-  status?: number;
-  referer?: string;
-  userAgent?: string;
-  duration?: bigint;
+  ip: string;
+  method: string;
+  path: string;
+  body: any;
+  query: Record<string, string | undefined>;
+  time: Date;
+  contentLength: number;
+  status: number;
+  referer: string;
+  userAgent: string;
+  duration: bigint;
 };
 
 export type ErrorAttribute = {
@@ -29,22 +29,14 @@ export type ErrorAttribute = {
 };
 
 /**
- * `AttributeMap` is a type that maps each key of `Attribute` to a boolean.
- * It is used to indicate which attributes are enabled or disabled.
- */
-export type AttributeMap = {
-  [key in keyof Attribute]: boolean;
-};
-
-/**
  * `Presets` is an object that contains preset configurations for the Logestic module.
  */
 export type Preset = 'common' | 'fancy';
 /**
- * `FormatObj` is an object that contains functions to format successful and failed logs.
+ * `Callback` is an object that contains functions to format successful and failed logs.
  */
-export type FormatObj = {
-  onSuccess: (attr: Attribute) => string;
+export type Callback<K extends keyof Attribute> = {
+  onSuccess: (attr: Pick<Attribute, K>) => string;
   onFailure: (attr: ErrorAttribute) => string;
 };
 

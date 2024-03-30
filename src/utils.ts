@@ -7,7 +7,7 @@
 
 import { StatusMap } from 'elysia';
 import { type Context } from 'elysia';
-import type { AttributeMap, Attribute, LogType, LogLevelColour } from './types';
+import type { Attribute, LogType, LogLevelColour } from './types';
 import chalk, { ChalkInstance } from 'chalk';
 
 /**
@@ -15,14 +15,14 @@ import chalk, { ChalkInstance } from 'chalk';
  * @param reqAttrs A map of attributes to be built
  * @returns The built attributes
  */
-export const buildAttrs = (
+export const buildAttrs = <K extends keyof Attribute>(
   ctx: Context,
-  reqAttrs: AttributeMap,
+  reqAttrs: K[],
   timeStart: bigint
-): Attribute => {
+): Pick<Attribute, K> => {
   const { request, path, body, query, set } = ctx;
 
-  let attrs: Attribute = {};
+  let attrs: Partial<Attribute> = {};
   for (const key in reqAttrs) {
     const k = key as keyof Attribute;
     switch (k) {
@@ -76,7 +76,7 @@ export const buildAttrs = (
     }
   }
 
-  return attrs;
+  return attrs as Pick<Attribute, K>;
 };
 
 /**

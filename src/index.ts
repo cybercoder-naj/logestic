@@ -6,7 +6,7 @@
 import Elysia from 'elysia';
 import {
   Attribute,
-  FormatObj,
+  Callback,
   LogLevelColour,
   LogesticOptions,
   Preset
@@ -23,10 +23,8 @@ export const chalk = c; // Re-export chalk for custom formatting
 /**
  * Logestic class provides methods to configure and perform logging.
  */
-export class Logestic {
-  private requestedAttrs: {
-    [key in keyof Attribute]: boolean;
-  };
+export class Logestic<K extends keyof Attribute = keyof Attribute> {
+  private requestedAttrs: K[];
   private dest!: BunFile;
   private showLevel: boolean;
   private logLevelColour: LogLevelColour;
@@ -40,7 +38,7 @@ export class Logestic {
    * @see LogesticOptions
    */
   constructor(options: LogesticOptions = {}) {
-    this.requestedAttrs = {};
+    this.requestedAttrs = [];
     this.showLevel = options.showLevel || false;
     this.logLevelColour = options.logLevelColour || {};
     this.httpLogging = options.httpLogging || true;
@@ -82,23 +80,23 @@ export class Logestic {
    * @param attrs - An attribute key or an array of attribute keys.
    * @returns The Logestic instance for chaining.
    */
-  use(attr: keyof Attribute): Logestic;
-  use(attrs: (keyof Attribute)[]): Logestic;
-  use(attrs: keyof Attribute | (keyof Attribute)[]): Logestic {
+  use<NK extends K>(attr: NK): Logestic<NK>;
+  use<NK extends K>(attrs: NK[]): Logestic<NK>;
+  use<NK extends K>(attrs: NK | NK[]): Logestic<NK> {
     if (Array.isArray(attrs)) {
       for (const attr of attrs) {
         this._use(attr);
       }
-      return this;
+      return this as unknown as Logestic<NK>;
     }
 
     // Single attribute
     this._use(attrs);
-    return this;
+    return this as unknown as Logestic<NK>;
   }
 
-  private _use(attr: keyof Attribute) {
-    this.requestedAttrs[attr] = true;
+  private _use(attr: K) {
+    this.requestedAttrs.push(attr);
   }
 
   /**
@@ -128,7 +126,7 @@ export class Logestic {
    * @param formatAttr - The format object containing functions to format successful and failed logs.
    * @returns Elysia instance with the logger plugged in.
    */
-  format(this: Logestic, formatAttr: FormatObj) {
+  format(this: Logestic, formatAttr: Callback<K>) {
     return this.build()
       .state('logestic_timeStart', 0n)
       .onRequest(({ store }) => {
