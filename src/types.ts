@@ -41,10 +41,10 @@ export type AttributeMap = {
  */
 export type Preset = 'common' | 'fancy';
 /**
- * `FormatObj` is an object that contains functions to format successful and failed logs.
+ * `Callback` is an object that contains functions to format successful and failed logs.
  */
-export type FormatObj = {
-  onSuccess: (attr: Attribute) => string;
+export type Callback<K extends keyof Attribute> = {
+  onSuccess: (attr: Pick<Attribute, K>) => string;
   onFailure: (attr: ErrorAttribute) => string;
 };
 

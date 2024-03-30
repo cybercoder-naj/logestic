@@ -15,11 +15,11 @@ import chalk, { ChalkInstance } from 'chalk';
  * @param reqAttrs A map of attributes to be built
  * @returns The built attributes
  */
-export const buildAttrs = (
+export const buildAttrs = <K extends keyof Attribute>(
   ctx: Context,
-  reqAttrs: AttributeMap,
+  reqAttrs: K[],
   timeStart: bigint
-): Attribute => {
+): Pick<Attribute, K> => {
   const { request, path, body, query, set } = ctx;
 
   let attrs: Attribute = {};
