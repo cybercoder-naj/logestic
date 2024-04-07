@@ -1,4 +1,8 @@
 # CHANGELOG
+## [1.1.1] - 07-04-2024
+### Fixed
+- `onSuccess` receiving undefined values in parameters.
+
 ## [1.1.0] - 31-03-2024
 ### Added
 - Optional `onRequest` logging formatter for hooking onto onRequest. ([#13](https://github.com/cybercoder-naj/logestic/issues/13))
