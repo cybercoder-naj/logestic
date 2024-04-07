@@ -23,8 +23,8 @@ export const buildAttrs = <K extends keyof Attribute>(
   const { request, path, body, query, set } = ctx;
 
   let attrs: Partial<Attribute> = {};
-  for (const key in reqAttrs) {
-    const k = key as keyof Attribute;
+  for (const key of reqAttrs) {
+    const k = key as K;
     switch (k) {
       case 'ip':
         attrs.ip = request.headers.get('x-forwarded-for') || '<ip?>';
