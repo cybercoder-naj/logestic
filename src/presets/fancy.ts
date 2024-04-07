@@ -12,6 +12,14 @@ const getDateTimeString = (date: Date) => {
   return `${day}/${month}/${year} ${hours}:${minutes}:${seconds}`;
 };
 
+const formatDuration = (duration: number) => {
+  if (duration < 1000) return `${duration}μs`;
+  else if (duration < 1000000) return `${(duration / 1000).toFixed(2)}ms`;
+  else if (duration < 60000000) return `${(duration / 1000000).toFixed(2)}s`;
+  else if (duration < 3600000000) return `${(duration / 60000000).toFixed(2)}m`;
+  else return `${(duration / 3600000000).toFixed(2)}h`;
+};
+
 const defaultOptions: LogesticOptions = {
   showLevel: true
 };
@@ -26,8 +34,9 @@ export default (options: LogesticOptions) =>
       onSuccess({ time, method, path, duration }) {
         const dateTime = chalk.gray(getDateTimeString(time!!));
         const methodPath = chalk.cyan(`${method} ${path}`);
-
-        return `${dateTime} ${methodPath} ${duration}μs`;
+        const formattedDuration = formatDuration(duration);
+      
+        return `${dateTime} ${methodPath} ${formattedDuration}`;
       },
       onFailure({ request, datetime }) {
         const dateTime = getDateTimeString(datetime!!);
