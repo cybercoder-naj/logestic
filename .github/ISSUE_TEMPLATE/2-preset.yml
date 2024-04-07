@@ -32,11 +32,11 @@ body:
     attributes:
       label: Verify if you have done the following.
       options:
-        - label: Added your preset name to `Preset` type in src/types.ts.
+        - label: Added your preset name to `Preset` type in `src/types.ts`.
           required: true
-        - label: Created a file in src/presets that exports an Elysia logger instance as default.
+        - label: Created a file in `src/presets` that exports an `Elysia` logger instance as default.
           required: true
-        - label: Added the case clause in src/presets/index.ts.
+        - label: Added the case clause in `src/presets/index.ts`.
           required: true
 
   - type: textarea
