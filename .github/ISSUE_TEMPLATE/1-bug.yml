@@ -17,19 +17,19 @@ body:
     attributes:
       label: What is the bug and how to reproduce it?
       description: Add steps how to re-create this bug and describe it.
-      validations:
-        required: false 
+    validations:
+      required: false 
 
   - type: textarea
     attributes:
       label: What is the expected behaviour?
       description: A concise description of what you expect to happen.
-      validations:
-        required: false 
+    validations:
+      required: false 
 
   - type: textarea
     attributes:
       label: Any additional information/media?
       description: Use the same to provide images, code, links, etc.
-      validations:
-        required: false 
+    validations:
+      required: false 

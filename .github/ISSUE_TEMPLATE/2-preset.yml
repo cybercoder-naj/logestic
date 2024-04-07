@@ -1,0 +1,46 @@
+name: Submit a Preset
+description: Submit a preset
+labels: ["new preset"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thank you for using Logestic. Your contributions help make Logestic better!
+
+  - type: checkboxes
+    attributes:
+      label: Have you read the Contributing Guidelines?
+      description: Please read the Contributing Guidelines to submit a valid preset.
+      options:
+      - label: I have read the contributing guidelines.
+        required: true
+
+  - type: checkboxes
+    attributes:
+      label: Are you submitting your own work?
+      description: Make sure you are not submitting someone else's work. 
+      options:
+      - label: I confirm that the preset I am submitting is my work.
+        required: true
+
+  - type: input
+    attributes:
+      label: What is the name of the preset?
+      description: Give your preset a unique name!
+
+  - type: checkboxes
+    attributes:
+      label: Verify if you have done the following.
+      options:
+        - label: Added your preset name to `Preset` type in src/types.ts.
+          required: true
+        - label: Created a file in src/presets that exports an Elysia logger instance as default.
+          required: true
+        - label: Added the case clause in src/presets/index.ts.
+          required: true
+
+  - type: textarea
+    attributes:
+      label: Paste a preview image of your preset.
+    validations:
+      required: false 
