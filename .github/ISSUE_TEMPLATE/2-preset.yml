@@ -38,6 +38,8 @@ body:
           required: true
         - label: Added the case clause in `src/presets/index.ts`.
           required: true
+        - label: Added a preview image in `screenshots/`.
+          required: true
 
   - type: textarea
     attributes:
