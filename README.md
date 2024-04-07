@@ -4,6 +4,10 @@
 
 An advanced and customisable logging library for [ElysiaJS](https://elysiajs.com).
 
+<div align="center">
+<img src="screenshots/fancy.png" alt="fancy preset">
+</div
+
 ## Table of Contents
 
 - [Logestic](#logestic)
