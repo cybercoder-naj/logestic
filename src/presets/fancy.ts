@@ -13,11 +13,11 @@ const getDateTimeString = (date: Date) => {
 };
 
 const formatDuration = (duration: number) => {
-  if (duration < 1000) return `${duration}μs`;
-  else if (duration < 1000000) return `${(duration / 1000).toFixed(2)}ms`;
-  else if (duration < 60000000) return `${(duration / 1000000).toFixed(2)}s`;
-  else if (duration < 3600000000) return `${(duration / 60000000).toFixed(2)}m`;
-  else return `${(duration / 3600000000).toFixed(2)}h`;
+  if (duration < 1_000) return `${duration}μs`;
+  else if (duration < 1_000_000) return `${(duration / 1_000).toFixed(2)}ms`;
+  else if (duration < 60 * 1_000_000) return `${(duration / 1_000_000).toFixed(2)}s`;
+  else if (duration < 60 * 60 * 1_000_000) return `${(duration / (60 * 1_000_000)).toFixed(2)}m`;
+  else return `${(duration / (60 * 60 * 1_000_000)).toFixed(2)}h`;
 };
 
 const defaultOptions: LogesticOptions = {
