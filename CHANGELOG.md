@@ -1,5 +1,5 @@
 # CHANGELOG
-## Unreleased
+## [1.1.2] - 11-04-2024
 ### Changed
 - `duration` on the `fancy` preset is formatted to the nearest time unit. ([#24](https://github.com/cybercoder-naj/logestic/issues/24))
 
