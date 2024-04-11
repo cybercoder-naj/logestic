@@ -12,14 +12,6 @@ const getDateTimeString = (date: Date) => {
   return `${day}/${month}/${year} ${hours}:${minutes}:${seconds}`;
 };
 
-const formatDuration = (duration: number) => {
-  if (duration < 1_000) return `${duration}μs`;
-  else if (duration < 1_000_000) return `${(duration / 1_000).toFixed(2)}ms`;
-  else if (duration < 60 * 1_000_000) return `${(duration / 1_000_000).toFixed(2)}s`;
-  else if (duration < 60 * 60 * 1_000_000) return `${(duration / (60 * 1_000_000)).toFixed(2)}m`;
-  else return `${(duration / (60 * 60 * 1_000_000)).toFixed(2)}h`;
-};
-
 const defaultOptions: LogesticOptions = {
   showLevel: true
 };
@@ -34,9 +26,8 @@ export default (options: LogesticOptions) =>
       onSuccess({ time, method, path, duration }) {
         const dateTime = chalk.gray(getDateTimeString(time!!));
         const methodPath = chalk.cyan(`${method} ${path}`);
-        const formattedDuration = formatDuration(duration);
-      
-        return `${dateTime} ${methodPath} ${formattedDuration}`;
+
+        return `${dateTime} ${methodPath} ${duration}μs`;
       },
       onFailure({ request, datetime }) {
         const dateTime = getDateTimeString(datetime!!);
