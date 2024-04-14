@@ -60,7 +60,9 @@ export class Logestic<K extends keyof Attribute = keyof Attribute> {
       return;
     }
 
-    // Custom file destination
+    // Custom file destination  // afterAll(async () => {
+    //   await unlink(tempFilePath);
+    // });
     this.createFileIfNotExists(dest)
       .then(file => (this.dest = file))
       .catch(err => {
@@ -175,11 +177,7 @@ export class Logestic<K extends keyof Attribute = keyof Attribute> {
     }
 
     const sanitised = removeAnsi(msgNewLine);
-    fs.appendFile(this.dest.name, sanitised, err => {
-      if (err) {
-        throw err;
-      }
-    });
+    fs.appendFileSync(this.dest.name, sanitised);
   }
 
   /**
