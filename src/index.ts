@@ -172,7 +172,7 @@ export class Logestic<K extends keyof Attribute = keyof Attribute> {
     const msgNewLine = `${msg}\n`;
     if (!this.dest.name || !this.dest.name.length) {
       // This is either stdout or stderr
-      Bun.write(this.dest, msgNewLine);
+      await Bun.write(this.dest, msgNewLine);
       return;
     }
 
