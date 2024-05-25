@@ -1,5 +1,6 @@
 import { Preset } from '../types';
 import common from './common';
+import uncommon from './common';
 import fancy from './fancy';
 
 export const getPreset = (preset: Preset) => {
@@ -8,5 +9,7 @@ export const getPreset = (preset: Preset) => {
       return common;
     case 'fancy':
       return fancy;
+    case 'uncommon':
+      return uncommon;
   }
 };
