@@ -1,6 +1,7 @@
 import { Preset } from '../types';
 import common from './common';
 import fancy from './fancy';
+import commontz from './commontz';
 
 export const getPreset = (preset: Preset) => {
   switch (preset) {
@@ -8,5 +9,7 @@ export const getPreset = (preset: Preset) => {
       return common;
     case 'fancy':
       return fancy;
+    case 'commontz':
+      return commontz;
   }
 };

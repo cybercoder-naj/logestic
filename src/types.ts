@@ -31,7 +31,7 @@ export type ErrorAttribute = {
 /**
  * `Presets` is an object that contains preset configurations for the Logestic module.
  */
-export type Preset = 'common' | 'fancy';
+export type Preset = 'common' | 'fancy' | 'commontz';
 /**
  * `Callback` is an object that contains functions to format successful and failed logs.
  */
