@@ -1,8 +1,17 @@
 import { Elysia } from 'elysia';
 import { Logestic } from 'logestic';
 
+const logger = new Logestic().use(['method', 'status']).format({
+  onSuccess({ method, status }) {
+    return `${method} ${status}`;
+  },
+  onFailure({ request, code }) {
+    return `${request.method} ${code}`;
+  }
+});
+
 const app = new Elysia()
-  .use(Logestic.preset('fancy'))
+  .use(logger)
   .get('/', () => 'Hello, world!')
   .get('/hello/:name', ({ params: { name } }) => `Hello, ${name}!`)
   .get('/returnBad', ({ set, logestic }) => {
@@ -16,5 +25,7 @@ const app = new Elysia()
     return 'Server crashed';
   })
   .listen(3000, () => {
-    // console.log('Server is running on port 3000');
+    console.log('Server is running on port 3000');
   });
+
+export default app;

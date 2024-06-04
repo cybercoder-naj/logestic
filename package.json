@@ -25,7 +25,7 @@
   "type": "module",
   "scripts": {
     "build": "rimraf dist && bun build src/index.ts --outdir dist --target bun --minify -e elysia && tsc",
-    "test": "bun test",
+    "test": "echo ' ' > test.log && bun test",
     "prepublishOnly": "bun run build"
   },
   "peerDependencies": {
