@@ -12,7 +12,7 @@ const app = new Elysia()
   })
   .get('/crashServer', ({ set, logestic }) => {
     set.status = 500;
-    logestic.error('MAYDAY!');
+    // logestic.error('MAYDAY!');
     return 'Server crashed';
   })
   .listen(3000, () => {
