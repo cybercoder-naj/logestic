@@ -30,12 +30,12 @@
   },
   "peerDependencies": {
     "typescript": "^5.0.0",
-    "elysia": "^1.1.0"
+    "elysia": "^1.1.1"
   },
   "devDependencies": {
     "@elysiajs/eden": "1.0.7",
     "bun-types": "latest",
-    "elysia": "^1.1.0",
+    "elysia": "^1.1.1",
     "rimraf": "^5.0.5",
     "typescript": "^5.4.3"
   },
