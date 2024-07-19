@@ -1,8 +1,11 @@
 # CHANGELOG
 
-## Unreleased
+## [1.2.1] - 19-07-2024
 ### Added
 - GitHub Actions to automate the release workflow. ([#29](https://github.com/cybercoder-naj/logestic/pull/29))
+
+### Fixed
+- Breaking changes with Elysia v1.1.x releases. ([#32](https://github.com/cybercoder-naj/logestic/pull/32))
 
 ## [1.2.0] - 27-05-2024
 ### Added
