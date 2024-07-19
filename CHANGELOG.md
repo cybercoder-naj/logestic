@@ -1,4 +1,9 @@
 # CHANGELOG
+
+## Unreleased
+### Added
+- GitHub Actions to automate the release workflow. ([#29](https://github.com/cybercoder-naj/logestic/pull/29))
+
 ## [1.2.0] - 27-05-2024
 ### Added
 - New preset `commontz`, which is similar to `common` but logs the time in server's timezone. ([#28](https://github.com/cybercoder-naj/logestic/pull/28))

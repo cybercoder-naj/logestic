@@ -24,7 +24,14 @@ Add the package to your Elysia Project via [bun](https://bun.sh).
 ```bash
   bun add logestic
 ```
-**Note**: You must have `elysia@1.0` installed in your project.
+
+## Compatibility Matrix
+
+| Logestic Version | Elysia Version | Compatible? |
+| :--------------: | :------------: | :---------: |
+| <= v1.2.0           | v1.0.9         | ✅ |
+| v1.2.0           | v1.1.0         | ❌ |
+| v1.2.1           | v1.1.3         | ✅ |
 
 ## Usage
 

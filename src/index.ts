@@ -140,7 +140,7 @@ export class Logestic<K extends keyof Attribute = keyof Attribute> {
           this.log(msg);
         }
       })
-      .onResponse({ as: 'global' }, ctx => {
+      .onAfterResponse({ as: 'global' }, ctx => {
         if (!this.httpLogging) {
           return;
         }
