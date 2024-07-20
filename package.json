@@ -26,6 +26,7 @@
   "scripts": {
     "build": "rimraf dist && bun build src/index.ts --outdir dist --target bun -e elysia && tsc",
     "test": "bun test",
+    "preview": "bun run --cwd preview dev",
     "prepublishOnly": "bun run build && { echo '/*'; cat LICENSE; echo '*/'; cat dist/index.js; } > /tmp/index.js && mv /tmp/index.js dist/index.js"
   },
   "peerDependencies": {
