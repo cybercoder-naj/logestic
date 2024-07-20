@@ -24,7 +24,7 @@
   "module": "src/index.ts",
   "type": "module",
   "scripts": {
-    "build": "rimraf dist && bun build src/index.ts --outdir dist --target bun --minify -e elysia && tsc",
+    "build": "rimraf dist && bun build src/index.ts --outdir dist --target bun --minify-syntax --minify-whitespace -e elysia && tsc",
     "test": "bun test",
     "prepublishOnly": "bun run build"
   },
