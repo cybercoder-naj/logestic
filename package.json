@@ -24,9 +24,10 @@
   "module": "src/index.ts",
   "type": "module",
   "scripts": {
-    "build": "rimraf dist && bun build src/index.ts --outdir dist --target bun --minify -e elysia && tsc",
+    "build": "rimraf dist && bun build src/index.ts --outdir dist --target bun -e elysia && tsc",
     "test": "bun test",
-    "prepublishOnly": "bun run build"
+    "preview": "bun run --cwd preview dev",
+    "prepublishOnly": "bun run build && { echo '/*'; cat LICENSE; echo '*/'; cat dist/index.js; } > /tmp/index.js && mv /tmp/index.js dist/index.js"
   },
   "peerDependencies": {
     "typescript": "^5.0.0",
