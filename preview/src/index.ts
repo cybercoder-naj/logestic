@@ -1,5 +1,5 @@
 import { Elysia } from 'elysia';
-import { Logestic } from 'logestic';
+import { Logestic } from '../../dist';
 
 const app = new Elysia()
   .use(Logestic.preset('fancy'))
