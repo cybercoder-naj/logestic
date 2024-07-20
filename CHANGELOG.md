@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## [1.2.2] - 20-07-2024
+### Fixed
+- Deploy non-minified code for Elysia applications to run. ([#34](https://github.com/cybercoder-naj/logestic/pull/34))
+
 ## [1.2.1] - 19-07-2024
 ### Added
 - GitHub Actions to automate the release workflow. ([#29](https://github.com/cybercoder-naj/logestic/pull/29))

@@ -2,6 +2,8 @@
 
 [![npm version](https://badge.fury.io/js/logestic.svg)](https://badge.fury.io/js/logestic)
 
+[Demo](./preview/src/index.ts) &bullet; [Documentation](https://github.com/cybercoder-naj/logestic/wiki) &bullet; [Changelog](./CHANGELOG.md) &bullet; [License](./LICENSE)
+
 An advanced and customisable logging library for [ElysiaJS](https://elysiajs.com).
 
 <div align="center">
@@ -14,9 +16,7 @@ An advanced and customisable logging library for [ElysiaJS](https://elysiajs.com
 - [Table of Contents](#table-of-contents)
 - [Installation](#installation)
 - [Usage](#usage)
-- [Documentation](#documentation)
 - [Contributing Guidelines](#contributing-guidelines)
-- [License](#license)
 
 ## Installation
 
@@ -30,8 +30,8 @@ Add the package to your Elysia Project via [bun](https://bun.sh).
 | Logestic Version | Elysia Version | Compatible? |
 | :--------------: | :------------: | :---------: |
 | <= v1.2.0           | v1.0.9         | ✅ |
-| v1.2.0           | v1.1.0         | ❌ |
-| v1.2.1           | v1.1.3         | ✅ |
+| v1.2.0 - v1.2.1           | v1.1.0         | ❌ |
+| v1.2.2           | v1.1.3         | ✅ |
 
 ## Usage
 
@@ -52,14 +52,6 @@ const app = new Elysia()
 
 These [presets](https://github.com/cybercoder-naj/logestic/wiki/Presets) available to use. 
 
-## Documentation
-
-To view the full documentation, view the [wiki](https://github.com/cybercoder-naj/logestic/wiki/).
-
 ## Contributing Guidelines
 
 See [CONTRIBUTING.md](./CONTRIBUTING.md)
-
-## License
-
-[MIT](./LICENSE)
