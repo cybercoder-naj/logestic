@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## [1.2.3] - 20-07-2024
+### Fixed
+- Deploy minified code with a workaround that works. ([#35](https://github.com/cybercoder-naj/logestic/pull/35))
+
 ## [1.2.2] - 20-07-2024
 ### Fixed
 - Deploy non-minified code for Elysia applications to run. ([#34](https://github.com/cybercoder-naj/logestic/pull/34))

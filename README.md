@@ -31,7 +31,7 @@ Add the package to your Elysia Project via [bun](https://bun.sh).
 | :--------------: | :------------: | :---------: |
 | <= v1.2.0           | v1.0.9         | ✅ |
 | v1.2.0 - v1.2.1           | v1.1.0         | ❌ |
-| v1.2.2           | v1.1.3         | ✅ |
+| >= v1.2.2           | v1.1.3         | ✅ |
 
 ## Usage
 
