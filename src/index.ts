@@ -167,6 +167,9 @@ export class Logestic<K extends keyof Attribute = keyof Attribute> {
   }
 
   private async log(msg: string): Promise<void> {
+    // ignore empty logs
+    if (!msg || msg === "") return
+
     const msgNewLine = `${msg}\n`;
     if (!this.dest.name || !this.dest.name.length) {
       // This is either stdout or stderr
