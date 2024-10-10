@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## [1.2.4] - 10-10-2024
+### Fixed
+- Prevent logging for empty messages ([#38](https://github.com/cybercoder-naj/logestic/pull/38))
+
 ## [1.2.3] - 20-07-2024
 ### Fixed
 - Deploy minified code with a workaround that works. ([#35](https://github.com/cybercoder-naj/logestic/pull/35))
