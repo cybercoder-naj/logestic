@@ -39,12 +39,12 @@ export class Logestic<K extends keyof Attribute = keyof Attribute> {
    */
   constructor(options: LogesticOptions = {}) {
     this.requestedAttrs = [];
-    this.showLevel = options.showLevel || false;
-    this.logLevelColour = options.logLevelColour || {};
-    this.httpLogging = options.httpLogging || true;
-    this.explicitLogging = options.explicitLogging || true;
+    this.showLevel = options.showLevel ?? false;
+    this.logLevelColour = options.logLevelColour ?? {};
+    this.httpLogging = options.httpLogging ?? true;
+    this.explicitLogging = options.explicitLogging ?? true;
 
-    this.setDest(options.dest || Bun.stdout);
+    this.setDest(options.dest ?? Bun.stdout);
   }
 
   private setDest(dest: BunFile): void {
