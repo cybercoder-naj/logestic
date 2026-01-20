@@ -1,6 +1,6 @@
 import { Logestic } from '..';
 import chalk from 'chalk';
-import { LogesticOptions } from '../types';
+import type { LogesticOptions } from '../types';
 
 const getDateTimeString = (date: Date) => {
   const year = date.getFullYear();

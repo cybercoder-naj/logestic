@@ -8,7 +8,7 @@
 import { StatusMap } from 'elysia';
 import { type Context } from 'elysia';
 import type { Attribute, LogType, LogLevelColour } from './types';
-import chalk, { ChalkInstance } from 'chalk';
+import chalk, { type ChalkInstance } from 'chalk';
 
 /**
  * @param ctx Elysia context
@@ -16,7 +16,7 @@ import chalk, { ChalkInstance } from 'chalk';
  * @returns The built attributes
  */
 export const buildAttrs = <K extends keyof Attribute>(
-  ctx: Context,
+  ctx: Omit<Context, 'params'>,
   reqAttrs: K[],
   timeStart: bigint
 ): Pick<Attribute, K> => {

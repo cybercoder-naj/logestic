@@ -1,4 +1,4 @@
-import { Preset } from '../types';
+import type { Preset } from '../types';
 import common from './common';
 import fancy from './fancy';
 import commontz from './commontz';

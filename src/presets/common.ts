@@ -1,6 +1,6 @@
 import { Logestic } from '..';
 import chalk from 'chalk';
-import { LogesticOptions } from '../types';
+import type { LogesticOptions } from '../types';
 
 export default (options: LogesticOptions) =>
   new Logestic(options).use(['time', 'method', 'path', 'status']).format({
