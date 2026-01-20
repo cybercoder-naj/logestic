@@ -5,7 +5,13 @@
  * It also includes a type for the format object.
  */
 
-import { BunFile } from 'bun';
+/**
+ * @module types
+ * @description This module provides types for the Logestic module.
+ * It includes types for attributes, presets, and options.
+ * It also includes a type for the format object.
+ */
+import type { BunFile } from 'bun';
 
 export type Attribute = {
   ip: string;
@@ -23,7 +29,7 @@ export type Attribute = {
 
 export type ErrorAttribute = {
   request: Request;
-  error: Error;
+  error: Readonly<Error>;
   code: any; // either string description or number
   datetime: Date;
 };

@@ -4,14 +4,14 @@
  */
 
 import Elysia from 'elysia';
-import {
+import type {
   Attribute,
   Callback,
   LogLevelColour,
   LogesticOptions,
   Preset
 } from './types';
-import { BunFile } from 'bun';
+import type { BunFile } from 'bun';
 import c from 'chalk';
 import { buildAttrs, colourLogType, removeAnsi } from './utils';
 import { getPreset } from './presets';
@@ -39,12 +39,12 @@ export class Logestic<K extends keyof Attribute = keyof Attribute> {
    */
   constructor(options: LogesticOptions = {}) {
     this.requestedAttrs = [];
-    this.showLevel = options.showLevel || false;
-    this.logLevelColour = options.logLevelColour || {};
-    this.httpLogging = options.httpLogging || true;
-    this.explicitLogging = options.explicitLogging || true;
+    this.showLevel = options.showLevel ?? false;
+    this.logLevelColour = options.logLevelColour ?? {};
+    this.httpLogging = options.httpLogging ?? true;
+    this.explicitLogging = options.explicitLogging ?? true;
 
-    this.setDest(options.dest || Bun.stdout);
+    this.setDest(options.dest ?? Bun.stdout);
   }
 
   private setDest(dest: BunFile): void {
@@ -157,6 +157,7 @@ export class Logestic<K extends keyof Attribute = keyof Attribute> {
         this.log(msg);
       })
       .onError({ as: 'global' }, ({ request, error, code }) => {
+        if (!('message' in error)) return;
         let datetime = new Date();
         let msg = formatAttr.onFailure({ request, error, code, datetime });
         if (this.showLevel) {
@@ -168,7 +169,7 @@ export class Logestic<K extends keyof Attribute = keyof Attribute> {
 
   private async log(msg: string): Promise<void> {
     // ignore empty logs
-    if (!msg || msg === "") return
+    if (!msg || msg === '') return;
 
     const msgNewLine = `${msg}\n`;
     if (!this.dest.name || !this.dest.name.length) {
